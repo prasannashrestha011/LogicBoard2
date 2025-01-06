@@ -3,7 +3,14 @@
     const canvas=document.querySelector('canvas')
     const gateCmd=document.querySelectorAll('.btn')
 
-
+    const ports=[]
+    const portProp={
+        id:'',
+        radius:8,
+        value:false,
+        position:{x:0,y:0}
+    }
+    let counter=0
     let deviceWidth=null
     let deviceHeight=null
     const handleWindowResize=()=>{
@@ -18,9 +25,11 @@
    
     const getCanvasPoint=(clientX,clientY)=>{
         const rect=canvas.getBoundingClientRect()
+        const scaleX=canvas.width/rect.width
+        const scaleY=canvas.height/rect.height
         return {
-            x:clientX-rect.left,
-            y:clientY-rect.top
+            x:(clientX-rect.left)*scaleX,
+            y:(clientY-rect.top) *scaleY
         }
     }
     const handleMouseDown=(e)=>{
@@ -54,19 +63,38 @@
         const {x,y}=getCanvasPoint(clientX,clientY)
         onTouchEnd(x,y)
     }
-   
+    
+    const onTouchStart=(x,y)=>{
+        const point={x,y}
+        const clickedPort=ports.find(port=>{
+            const distance=calDistance(port,point)
+           
+            console.log(distance)
+            return distance<=port.radius
+        })
+             console.log("Your cliekced port",clickedPort)
+        console.log(ports)
+    }
+    const onTouchMove=(x,y)=>{
 
-    const drawRectange=(label)=>{
-        const {x,y}=generateRandomPosition()
-        ctx.beginPath()
-        ctx.fillStyle="blue"
-        ctx.rect(x,y,60,50)
-        ctx.fill()
+    }
+    const onTouchEnd=(x,y)=>{
 
-        ctx.fillStyle="white"
-        ctx.textAlign="center"
-        ctx.font="17px Arial"
-        ctx.fillText(label,x+30,y+25)
+    }
+    const calDistance=(port,point)=>{
+        console.log(port.position)
+        const distance= Math.sqrt(Math.pow(port.position.x-point.x,2)+Math.pow(port.position.y-point.y,2))
+        return distance
+    }
+
+    const drawRectange=()=>{
+        ports.forEach(port=>{
+            ctx.beginPath()
+            ctx.fillStyle="blue"
+            ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
+            ctx.fill()
+        })
+        
       
      
     }
@@ -75,6 +103,29 @@
         const positionY = Math.floor(Math.random() * deviceHeight); // Random Y position within the canvas height
         return { x: positionX, y: positionY };
     };
+   
+    const handlePortcreate=()=>{
+        const id=`port-${counter++}`
+        const position=generateRandomPosition()
+    
+        const newPort={
+            ...portProp,
+            id,
+            position
+        }
+
+        ports.push(newPort)
+        
+    }
+    gateCmd.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            console.log(e.target.id);
+            handlePortcreate()
+            drawRectange()
+           
+        });
+    });
+    
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
     canvas.addEventListener('mouseup',handleMouseUp)
@@ -84,10 +135,4 @@
     canvas.addEventListener('touchend',handleTouchEnd)
     window.addEventListener('resize', handleWindowResize);
 
-    gateCmd.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            console.log(e.target.id);
-            drawRectange(e.target.id)
-        });
-    });
  })
