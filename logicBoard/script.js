@@ -1,9 +1,18 @@
  document.addEventListener('DOMContentLoaded',()=>{
 
     const canvas=document.querySelector('canvas')
-    canvas.width=500
-    canvas.height=400
+    const gateCmd=document.querySelectorAll('.btn')
 
+
+    let deviceWidth=null
+    let deviceHeight=null
+    const handleWindowResize=()=>{
+    deviceWidth=window.innerWidth *0.9 
+     deviceHeight=window.innerHeight *0.8
+    canvas.width=deviceWidth
+    canvas.height=deviceHeight
+    }
+    handleWindowResize()
     let isDrawing=false 
     const ctx=canvas.getContext('2d')
    
@@ -45,21 +54,27 @@
         const {x,y}=getCanvasPoint(clientX,clientY)
         onTouchEnd(x,y)
     }
-    const onTouchStart=(x,y)=>{
-        isDrawing=true
-        ctx.beginPath()
-        ctx.strokeStyle="blue"
-        ctx.moveTo(x,y)
+   
 
+    const drawRectange=(label)=>{
+        const {x,y}=generateRandomPosition()
+        ctx.beginPath()
+        ctx.fillStyle="blue"
+        ctx.rect(x,y,60,50)
+        ctx.fill()
+
+        ctx.fillStyle="white"
+        ctx.textAlign="center"
+        ctx.font="17px Arial"
+        ctx.fillText(label,x+30,y+25)
+      
+     
     }
-    const onTouchMove=(x,y)=>{
-       if(!isDrawing)return 
-        ctx.lineTo(x,y)
-        ctx.stroke()
-    }
-    const onTouchEnd=(x,y)=>{
-        isDrawing=false 
-    }
+    const generateRandomPosition = () => {
+        const positionX = Math.floor(Math.random() * deviceWidth);  // Random X position within the canvas width
+        const positionY = Math.floor(Math.random() * deviceHeight); // Random Y position within the canvas height
+        return { x: positionX, y: positionY };
+    };
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
     canvas.addEventListener('mouseup',handleMouseUp)
@@ -67,4 +82,12 @@
     canvas.addEventListener('touchstart',handleTouchStart)
     canvas.addEventListener('touchmove',handleTouchMove)
     canvas.addEventListener('touchend',handleTouchEnd)
+    window.addEventListener('resize', handleWindowResize);
+
+    gateCmd.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            console.log(e.target.id);
+            drawRectange(e.target.id)
+        });
+    });
  })

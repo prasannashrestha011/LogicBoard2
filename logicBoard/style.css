@@ -1,0 +1,12 @@
+body{
+    display: flex;
+    flex-direction: column;
+    
+}
+.btn{
+    width: 12rem;
+}
+.btn-nav{
+    display: flex;
+    
+}
