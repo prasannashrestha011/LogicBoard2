@@ -10,6 +10,7 @@
         value:false,
         position:{x:0,y:0}
     }
+    let selectedPort=null
     let counter=0
     let deviceWidth=null
     let deviceHeight=null
@@ -72,14 +73,23 @@
             console.log(distance)
             return distance<=port.radius
         })
-             console.log("Your cliekced port",clickedPort)
-        console.log(ports)
+          if(clickedPort){
+            clickedPort.value=!clickedPort.value
+            selectedPort=clickedPort
+          }
+     drawRectange()
     }
-    const onTouchMove=(x,y)=>{
-
-    }
+    const onTouchMove = (x, y) => {
+        if(!selectedPort) return 
+        selectedPort.position={x,y}
+        const portIdx=ports.findIndex(port=>port.id==selectedPort.id)
+        if(portIdx==-1) return 
+        ports[portIdx]=selectedPort
+        ctx.clearRect(0,0,deviceWidth,deviceHeight)
+        drawRectange()
+    };
     const onTouchEnd=(x,y)=>{
-
+        selectedPort=null
     }
     const calDistance=(port,point)=>{
         console.log(port.position)
@@ -90,7 +100,7 @@
     const drawRectange=()=>{
         ports.forEach(port=>{
             ctx.beginPath()
-            ctx.fillStyle="blue"
+            ctx.fillStyle=port.value?'red':'blue'
             ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
             ctx.fill()
         })
