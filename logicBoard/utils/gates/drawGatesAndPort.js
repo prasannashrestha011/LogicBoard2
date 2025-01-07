@@ -1,0 +1,30 @@
+function DrawGatesAndPort(){
+    gates.map(gate=>{
+        gate.inputs.map(port=>{
+            ctx.beginPath()
+            ctx.fillStyle="black"
+            ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
+            ctx.fill()
+        })
+        //@@ for output port 
+        ctx.beginPath()
+        ctx.fillStyle="black"
+        ctx.arc(gate.output.position.x,gate.output.position.y,gate.output.radius,0,Math.PI*2)
+        ctx.fill()
+        if(gate.type=="and"){
+            DrawAndGate(gate)
+        }
+        if(gate.type=="or"){
+            DrawORgate(gate)
+        }
+        if(gate.type=="nand"){
+            DrawNanDGate(gate)
+        }
+        if(gate.type=="nor"){
+            DrawNorGate(gate)
+        }
+        if(gate.type=="x-or"){
+            DrawXorGate(gate)
+        }
+    })
+}

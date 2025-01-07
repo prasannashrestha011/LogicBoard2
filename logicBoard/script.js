@@ -1,5 +1,8 @@
  let canvas=null
  let ctx=null
+
+ let gates=[]
+ let gateType=""
  document.addEventListener('DOMContentLoaded',()=>{
 
       canvas=document.querySelector('canvas')
@@ -40,7 +43,10 @@
         const {x,y}=getCanvasPoint(clientX,clientY)
         onTouchEnd(x,y)
     }
-    
+    const handleClick=(e)=>{
+        const {x,y}=getCanvasPoint(e.clientX,e.clientY)
+        onTouchClick(x,y)
+    }
     const onTouchStart=(x,y)=>{
       
     }
@@ -52,15 +58,20 @@
        
     }
    
-
+    const onTouchClick=(x,y)=>{
+        console.log(gateType)
+        const position=generateRandomPosition()
+        gateCreator(gateType,position)
+        DrawGatesAndPort()
+    }
   
    
     
     gateCmd.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             console.log(e.target.id);
-           
-           
+            gateType=e.target.id
+            handleClick(e)
         });
     });
     
