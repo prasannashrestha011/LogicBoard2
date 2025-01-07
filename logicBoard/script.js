@@ -87,6 +87,7 @@
     const onTouchMove = (x, y) => {
         if(!isDragging) return
         if(selectedGate){
+            console.log("in the para")
             const updatedGate=updateGatePosition(selectedGate,{x,y})
         
             const gateIdx=gates.findIndex(gate=>gate.id==updatedGate.id)
@@ -104,6 +105,7 @@
             const portIdx=ports.findIndex(port=>updatedPortNode.id==port.id)
             if(portIdx==-1) return 
             ports[portIdx]=updatedPortNode
+            
         }
         DrawGatesAndPort()
         //@@ for drawing tempo lines (connectors)
@@ -121,11 +123,19 @@
        
     };
     const onTouchEnd=(x,y)=>{
-  
-        const targetedPort=ports.find(port=>{
+        let targetedPort=null
+         targetedPort=ports.find(port=>{
             const distance=calDistance(port,{x,y})
             return distance<=port.radius
         })
+        gates.map(gate=>{
+            const clickedPort= gate.inputs.find(port=>{
+                const distance=calDistance(port,{x,y})
+                return distance<=port.radius
+            })
+            targetedPort=clickedPort
+        })
+        console.log("your targeted port ",targetedPort)
         if(selectedPort&&targetedPort){
             const isValidConnection=(selectedPort.id!==targetedPort.id)
             if(isValidConnection){
@@ -139,7 +149,7 @@
        
         }
         DrawGatesAndPort()
-        console.log("already triggered")
+        
         isDrawing=false
        isDragging=false
        isDraggingPortNode=false
