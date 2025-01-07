@@ -129,3 +129,21 @@ function updatePortPosition(port,newPosition){
     }
     return updatedPort
 }
+function updateGateConnectionsPosition(connections, updatedGate) {
+    return connections.map((conn) => {
+        // Check if the connection's start matches any of the gate's input ports or output port
+        const startMatch = updatedGate.inputs.find((port) => port.id === conn.start.id) || 
+                           (updatedGate.output.id === conn.start.id ? updatedGate.output : null);
+        const endMatch = updatedGate.inputs.find((port) => port.id === conn.end.id) || 
+                         (updatedGate.output.id === conn.end.id ? updatedGate.output : null);
+
+        // Update the positions if there is a match
+        const updatedStartPort = startMatch ? { ...conn.start, position: startMatch.position } : conn.start;
+        const updatedEndPort = endMatch ? { ...conn.end, position: endMatch.position } : conn.end;
+
+        return {
+            start: updatedStartPort,
+            end: updatedEndPort,
+        };
+    });
+}

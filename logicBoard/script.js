@@ -96,6 +96,8 @@
             }
             gates[gateIdx]=updatedGate
             console.log(updatedGate)
+            connections=updateGateConnectionsPosition(connections,updatedGate)
+            console.log("updated connection ",connections)
         }
         if(selectedPort && isDraggingPortNode){
             const updatedPortNode=updatePortPosition(selectedPort,{x,y})
@@ -115,10 +117,11 @@
         ctx.stroke();
        
         }
-       
+    
        
     };
     const onTouchEnd=(x,y)=>{
+  
         const targetedPort=ports.find(port=>{
             const distance=calDistance(port,{x,y})
             return distance<=port.radius
@@ -136,6 +139,7 @@
        
         }
         DrawGatesAndPort()
+        console.log("already triggered")
         isDrawing=false
        isDragging=false
        isDraggingPortNode=false

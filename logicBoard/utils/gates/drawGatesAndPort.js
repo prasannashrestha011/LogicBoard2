@@ -30,15 +30,16 @@ function DrawGatesAndPort(){
         if(gate.type=="xor"){
             DrawXorGate(gate)
         }
-        connections.map(conn=>{
-            ctx.beginPath()
-            ctx.strokeStyle="black"
-            ctx.moveTo(conn.start.position.x,conn.start.position.y)
-            ctx.lineTo(conn.end.position.x,conn.end.position.y)
-            ctx.stroke()
-        })
+       
     })
 
+    connections.map(conn=>{
+        ctx.beginPath()
+        ctx.strokeStyle="black"
+        ctx.moveTo(conn.start.position.x,conn.start.position.y)
+        ctx.lineTo(conn.end.position.x,conn.end.position.y)
+        ctx.stroke()
+    })
     ports.map(port=>{
         const rectX=port.position.x-port.width/2
         const rectY=port.position.y-port.height/2
