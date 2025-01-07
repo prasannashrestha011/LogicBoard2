@@ -27,8 +27,30 @@ function DrawGatesAndPort(){
         if(gate.type=="nor"){
             DrawNorGate(gate)
         }
-        if(gate.type=="x-or"){
+        if(gate.type=="xor"){
             DrawXorGate(gate)
         }
+        connections.map(conn=>{
+            ctx.beginPath()
+            ctx.strokeStyle="black"
+            ctx.moveTo(conn.start.position.x,conn.start.position.y)
+            ctx.lineTo(conn.end.position.x,conn.end.position.y)
+            ctx.stroke()
+        })
+    })
+
+    ports.map(port=>{
+        const rectX=port.position.x-port.width/2
+        const rectY=port.position.y-port.height/2
+        
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.rect(rectX, rectY, port.width, port.height);
+        ctx.stroke();
+
+        ctx.beginPath()
+        ctx.fillStyle="black"
+        ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
+        ctx.fill()
     })
 }

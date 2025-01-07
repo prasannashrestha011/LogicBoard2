@@ -13,7 +13,9 @@ const portTemplate={
     position:{x:0,y:0},
     value:false ,
     radius:8,
-    type:""
+    type:"",
+    width:40,
+    height:60
 }
 const gateTemplate={
     id:"",
@@ -24,7 +26,7 @@ const gateTemplate={
     inputs:[portTemplate],
     output:{...portTemplate}
 }
-function gateCreator(type,position){
+function createGate(type,position){
     const id=counter++
     if(type=="not"){
         const newGate={
@@ -34,7 +36,7 @@ function gateCreator(type,position){
             position,
             inputs:[
                 {
-                    id:`input-port-${id}`,
+                    id:`gate-input-port-${id}`,
                    ...portTemplate,
                    position:{x:position.x-notXoffset,y:position.y},
                    type:"gate-input",
@@ -60,7 +62,7 @@ function gateCreator(type,position){
         inputs:[
             {
                ...portTemplate,
-               id:`input-port-${id}`,
+               id:`gate-input-port-${id}`,
                position:{x:position.x-Xoffset,y:position.y-Yoffset},
                type:"gate-input",
              
@@ -107,4 +109,23 @@ function updateGatePosition(gate,newPosition){
         output:updatedOutputPort
     }
     return updatedGate
+}
+
+function createPort(type,position){
+    const id=counter++
+    const newInputPort={
+        ...portTemplate,
+        id:`port-${id}`,
+        position,
+        type
+    }
+    ports.push(newInputPort)
+}
+function updatePortPosition(port,newPosition){
+    if(!newPosition) return
+    const updatedPort={
+        ...port,
+        position:newPosition
+    }
+    return updatedPort
 }
