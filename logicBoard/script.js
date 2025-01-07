@@ -1,3 +1,5 @@
+
+
  let canvas=null
  let ctx=null
 
@@ -105,7 +107,7 @@
             const portIdx=ports.findIndex(port=>updatedPortNode.id==port.id)
             if(portIdx==-1) return 
             ports[portIdx]=updatedPortNode
-            
+            connections=updatePortConnectionPosition(connections,updatedPortNode)
         }
         DrawGatesAndPort()
         //@@ for drawing tempo lines (connectors)

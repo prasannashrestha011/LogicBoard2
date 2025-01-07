@@ -147,3 +147,16 @@ function updateGateConnectionsPosition(connections, updatedGate) {
         };
     });
 }
+ function updatePortConnectionPosition(prevConnection,updatePort){
+    return prevConnection.map(conn=>{
+        const startMatch=conn.start.id===updatePort.id
+        const endMatch=conn.end.id===updatePort.id
+
+        const updatedStartPort=startMatch?{...conn.start,position:updatePort.position}:conn.start 
+        const updatedEndPort=endMatch?{...conn.end,position:updatePort.position}:conn.end
+        return {
+            start:updatedStartPort,
+            end:updatedEndPort
+        }
+    })
+}
