@@ -1,4 +1,5 @@
 function DrawGatesAndPort(){
+    ctx.clearRect(0,0,canvas.width,canvas.height)
     gates.map(gate=>{
         gate.inputs.map(port=>{
             ctx.beginPath()
@@ -16,6 +17,9 @@ function DrawGatesAndPort(){
         }
         if(gate.type=="or"){
             DrawORgate(gate)
+        }
+        if(gate.type=="not"){
+            DrawNotGate(gate)
         }
         if(gate.type=="nand"){
             DrawNanDGate(gate)

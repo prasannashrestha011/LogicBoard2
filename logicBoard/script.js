@@ -3,6 +3,8 @@
 
  let gates=[]
  let gateType=""
+ let selectedGate=null
+ let isDragging=false
  document.addEventListener('DOMContentLoaded',()=>{
 
       canvas=document.querySelector('canvas')
@@ -48,14 +50,28 @@
         onTouchClick(x,y)
     }
     const onTouchStart=(x,y)=>{
-      
+        isDragging=true
+        const clickedGate=gates.find(gate=>isPointedOnGate(gate,{x,y}))
+        console.log("Your clicked gate ",clickedGate)
+        selectedGate=clickedGate
     }
     const onTouchMove = (x, y) => {
-       
-       
+        if(!isDragging) return
+        const updatedGate=updateGatePosition(selectedGate,{x,y})
+        
+        const gateIdx=gates.findIndex(gate=>gate.id==updatedGate.id)
+        if(gateIdx==-1){
+            console.log("invalid idx")
+            return
+        }
+        gates[gateIdx]=updatedGate
+        console.log(updatedGate)
+        DrawGatesAndPort()
     };
     const onTouchEnd=(x,y)=>{
-       
+       isDragging=false
+       selectedGate=
+       DrawGatesAndPort()
     }
    
     const onTouchClick=(x,y)=>{

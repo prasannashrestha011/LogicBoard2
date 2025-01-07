@@ -202,7 +202,7 @@
     
 }
 function DrawNod(gate){
-    console.log("gate form output",gate)
+  
     ctx.beginPath()
     ctx.fillStyle="black"
     ctx.arc(gate.output.position.x-22,gate.output.position.y,4,0,Math.PI*2)
