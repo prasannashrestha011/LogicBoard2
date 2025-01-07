@@ -1,38 +1,14 @@
+ let canvas=null
+ let ctx=null
  document.addEventListener('DOMContentLoaded',()=>{
 
-    const canvas=document.querySelector('canvas')
+      canvas=document.querySelector('canvas')
     const gateCmd=document.querySelectorAll('.btn')
 
-    const ports=[]
-    const portProp={
-        id:'',
-        radius:8,
-        value:false,
-        position:{x:0,y:0}
-    }
-    let selectedPort=null
-    let counter=0
-    let deviceWidth=null
-    let deviceHeight=null
-    const handleWindowResize=()=>{
-    deviceWidth=window.innerWidth *0.9 
-     deviceHeight=window.innerHeight *0.8
-    canvas.width=deviceWidth
-    canvas.height=deviceHeight
-    }
-    handleWindowResize()
-    let isDrawing=false 
-    const ctx=canvas.getContext('2d')
+
+     ctx=canvas.getContext('2d')
    
-    const getCanvasPoint=(clientX,clientY)=>{
-        const rect=canvas.getBoundingClientRect()
-        const scaleX=canvas.width/rect.width
-        const scaleY=canvas.height/rect.height
-        return {
-            x:(clientX-rect.left)*scaleX,
-            y:(clientY-rect.top) *scaleY
-        }
-    }
+   
     const handleMouseDown=(e)=>{
         const  {x,y}=getCanvasPoint(e.clientX,e.clientY)
         onTouchStart(x,y)
@@ -66,72 +42,24 @@
     }
     
     const onTouchStart=(x,y)=>{
-        const point={x,y}
-        const clickedPort=ports.find(port=>{
-            const distance=calDistance(port,point)
-           
-            console.log(distance)
-            return distance<=port.radius
-        })
-          if(clickedPort){
-            clickedPort.value=!clickedPort.value
-            selectedPort=clickedPort
-          }
-     drawRectange()
+      
     }
     const onTouchMove = (x, y) => {
-        if(!selectedPort) return 
-        selectedPort.position={x,y}
-        const portIdx=ports.findIndex(port=>port.id==selectedPort.id)
-        if(portIdx==-1) return 
-        ports[portIdx]=selectedPort
-        ctx.clearRect(0,0,deviceWidth,deviceHeight)
-        drawRectange()
+       
+       
     };
     const onTouchEnd=(x,y)=>{
-        selectedPort=null
+       
     }
-    const calDistance=(port,point)=>{
-        console.log(port.position)
-        const distance= Math.sqrt(Math.pow(port.position.x-point.x,2)+Math.pow(port.position.y-point.y,2))
-        return distance
-    }
-
-    const drawRectange=()=>{
-        ports.forEach(port=>{
-            ctx.beginPath()
-            ctx.fillStyle=port.value?'red':'blue'
-            ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
-            ctx.fill()
-        })
-        
-      
-     
-    }
-    const generateRandomPosition = () => {
-        const positionX = Math.floor(Math.random() * deviceWidth);  // Random X position within the canvas width
-        const positionY = Math.floor(Math.random() * deviceHeight); // Random Y position within the canvas height
-        return { x: positionX, y: positionY };
-    };
    
-    const handlePortcreate=()=>{
-        const id=`port-${counter++}`
-        const position=generateRandomPosition()
-    
-        const newPort={
-            ...portProp,
-            id,
-            position
-        }
 
-        ports.push(newPort)
-        
-    }
+  
+   
+    
     gateCmd.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             console.log(e.target.id);
-            handlePortcreate()
-            drawRectange()
+           
            
         });
     });
@@ -143,6 +71,6 @@
     canvas.addEventListener('touchstart',handleTouchStart)
     canvas.addEventListener('touchmove',handleTouchMove)
     canvas.addEventListener('touchend',handleTouchEnd)
-    window.addEventListener('resize', handleWindowResize);
+ 
 
  })
