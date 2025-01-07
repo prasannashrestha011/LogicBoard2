@@ -8,8 +8,13 @@ const handleWindowResize=()=>{
     deviceHeight=window.innerHeight *0.8
     canvas.width=deviceWidth
     canvas.height=deviceHeight
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    gates=[]
+    ports=[]
+    connections=[]
  }
     
  handleWindowResize()
  window.addEventListener('resize', handleWindowResize);
+  
 })
