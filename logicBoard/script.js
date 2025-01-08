@@ -13,6 +13,7 @@
  
  let isDragging=false
  let isDraggingPortNode=false // @@ for dragging the outer area of node only @@
+ let wasDragging=false
  let isDrawing=false
  document.addEventListener('DOMContentLoaded',()=>{
    
@@ -24,14 +25,17 @@
      DrawGatesAndPort()
    
     const handleMouseDown=(e)=>{
+        wasDragging=false
         const  {x,y}=getCanvasPoint(e.clientX,e.clientY)
         onTouchStart(x,y)
     }
     const handleMouseMove=(e)=>{
         const  {x,y}=getCanvasPoint(e.clientX,e.clientY)
+        wasDragging=true
         onTouchMove(x,y)
     }
     const handleMouseUp=(e)=>{
+      
         const {x,y}=getCanvasPoint(e.clientX,e.clientY)
         onTouchEnd(x,y)
     }
@@ -60,8 +64,12 @@
         onTouchClick(x,y)
     }
     const handleClickOnCanvasArea=(e)=>{
+      
+       if(wasDragging) return
         const {x,y}=getCanvasPoint(e.clientX,e.clientY)
         togglePortValue({x,y})
+      
+    
     }
     const onTouchStart=(x,y)=>{
         isDragging=true
@@ -88,6 +96,7 @@
         console.log("circular area ",clickedPort)
     }
     const onTouchMove = (x, y) => {
+
         if(!isDragging) return
         if(selectedGate){
             console.log("in the para")
@@ -126,6 +135,7 @@
        
     };
     const onTouchEnd=(x,y)=>{
+        
         let targetedPort=null
          targetedPort=findPort(x,y)
         gates.map(gate=>{
@@ -135,7 +145,7 @@
             })
             targetedPort=clickedPort
         })
-        console.log("your targeted port ",targetedPort)
+      
         if(selectedPort&&targetedPort){
             const isValidConnection=(selectedPort.id!==targetedPort.id)
             if(isValidConnection){
@@ -143,7 +153,7 @@
                     start:selectedPort,
                     end:targetedPort
                 })
-                console.log(connections)
+               
              
             }
        
@@ -155,6 +165,7 @@
        isDraggingPortNode=false
        selectedGate=null
         selectedPort=null
+        
     }
    
     const onTouchClick=(x,y)=>{
@@ -178,13 +189,25 @@
        
     }
     const togglePortValue=(point)=>{
+        if(isDraggingPortNode || isDragging) return
+      
+
          const clickedPort=findPort(point.x,point.y)
+         const isClickingThePortArea=isPointInPortNode(clickedPort, { x: point.x, y: point.y });
+        if(isClickingThePortArea) return
+        console.log("condition ",isClickingThePortArea)
          console.log("your clicked port is here for toggle",clickedPort)
          if(!clickedPort) return 
          const newValue=!clickedPort.value
          ports=ports.map(port=>{
             return port.id==clickedPort.id?{...port,value:newValue}:port
          })
+        if(gates.length>0){
+            gates=gates.map(gate=>{
+
+               return updatePortValues(gate,clickedPort,newValue)
+            })
+        }
          DrawGatesAndPort()
     }
     
