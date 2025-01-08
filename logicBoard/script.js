@@ -153,7 +153,19 @@
                     start:selectedPort,
                     end:targetedPort
                 })
-               
+                gates=gates.map(gate=>{
+                    const updatedInputIdx=gate.inputs.findIndex(port=>port.id==targetedPort.id)
+                    if(updatedInputIdx==-1) return  gate
+                  
+                    const updatedInputs=[...gate.inputs]
+                    updatedInputs[updatedInputIdx]={...targetedPort,value:selectedPort.value}
+                    
+                    const updatedOutput=calculateOutput(gate.type,updatedInputs)
+                    const updatedOutputPort={...gate.output,value:updatedOutput}
+                    return {...gate,inputs:updatedInputs,output:updatedOutputPort}
+                })
+
+
              
             }
        

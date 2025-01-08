@@ -10,6 +10,7 @@ function updatePortValues(gate,clickedPort,newValue){
         }
     })
     if(!hasConnection){
+       
         return gate 
     }
     console.log(gate)
