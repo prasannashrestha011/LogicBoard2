@@ -59,6 +59,10 @@
         const {x,y}=getCanvasPoint(e.clientX,e.clientY)
         onTouchClick(x,y)
     }
+    const handleClickOnCanvasArea=(e)=>{
+        const {x,y}=getCanvasPoint(e.clientX,e.clientY)
+        togglePortValue({x,y})
+    }
     const onTouchStart=(x,y)=>{
         isDragging=true
         
@@ -77,10 +81,7 @@
 
         //for port connections ## starting point
       
-        const clickedPort=ports.find(port=>{
-            const distance=calDistance(port,{x,y})
-            return distance<=port.radius
-        })
+        const clickedPort=findPort(x,y)
         if(!clickedPort) return 
         selectedPort=clickedPort
         isDrawing=true
@@ -126,10 +127,7 @@
     };
     const onTouchEnd=(x,y)=>{
         let targetedPort=null
-         targetedPort=ports.find(port=>{
-            const distance=calDistance(port,{x,y})
-            return distance<=port.radius
-        })
+         targetedPort=findPort(x,y)
         gates.map(gate=>{
             const clickedPort= gate.inputs.find(port=>{
                 const distance=calDistance(port,{x,y})
@@ -160,7 +158,7 @@
     }
    
     const onTouchClick=(x,y)=>{
-        console.log(type)
+
         const nodeType=type.split('-')[0]
         const position=generateRandomPosition()
         if(nodeType=="gate"){
@@ -174,10 +172,21 @@
             
             createPort(portType,position)
         }
+       
         DrawGatesAndPort()
+
        
     }
-  
+    const togglePortValue=(point)=>{
+         const clickedPort=findPort(point.x,point.y)
+         console.log("your clicked port is here for toggle",clickedPort)
+         if(!clickedPort) return 
+         const newValue=!clickedPort.value
+         ports=ports.map(port=>{
+            return port.id==clickedPort.id?{...port,value:newValue}:port
+         })
+         DrawGatesAndPort()
+    }
     
     
     gateCmd.forEach((btn) => {
@@ -195,7 +204,7 @@
     canvas.addEventListener('touchstart',handleTouchStart)
     canvas.addEventListener('touchmove',handleTouchMove)
     canvas.addEventListener('touchend',handleTouchEnd)
- 
+    canvas.addEventListener('click',handleClickOnCanvasArea)
    
 
  })

@@ -119,6 +119,7 @@ function createPort(type,position){
         position,
         type
     }
+    console.log("new port ",newInputPort)
     ports.push(newInputPort)
 }
 function updatePortPosition(port,newPosition){

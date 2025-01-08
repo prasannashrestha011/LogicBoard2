@@ -50,7 +50,7 @@ function DrawGatesAndPort(){
         ctx.stroke();
 
         ctx.beginPath()
-        ctx.fillStyle="black"
+        ctx.fillStyle=port.value?"red":"black"
         ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
         ctx.fill()
     })
