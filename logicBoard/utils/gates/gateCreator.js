@@ -81,7 +81,7 @@ function createGate(type,position){
             position:{x:position.x+outputOffset*2,y:position.y},
         }
      }
-     console.log("new gate",newGate)
+   
      gates.push(newGate)
  
 }
@@ -119,7 +119,7 @@ function createPort(type,position){
         position,
         type
     }
-    console.log("new port ",newInputPort)
+   
     ports.push(newInputPort)
 }
 function updatePortPosition(port,newPosition){

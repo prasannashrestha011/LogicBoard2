@@ -93,7 +93,7 @@
         if(!clickedPort) return 
         selectedPort=clickedPort
         isDrawing=true
-        console.log("circular area ",clickedPort)
+        
     }
     const onTouchMove = (x, y) => {
 
@@ -189,25 +189,23 @@
        
     }
     const togglePortValue=(point)=>{
-        if(isDraggingPortNode || isDragging) return
+        if(isDraggingPortNode || isDragging ) return
       
 
          const clickedPort=findPort(point.x,point.y)
-         const isClickingThePortArea=isPointInPortNode(clickedPort, { x: point.x, y: point.y });
-        if(isClickingThePortArea) return
-        console.log("condition ",isClickingThePortArea)
+       
          console.log("your clicked port is here for toggle",clickedPort)
          if(!clickedPort) return 
          const newValue=!clickedPort.value
          ports=ports.map(port=>{
             return port.id==clickedPort.id?{...port,value:newValue}:port
          })
-        if(gates.length>0){
-            gates=gates.map(gate=>{
+        
+            const updatedGate=gates.map(gate=>{
 
                return updatePortValues(gate,clickedPort,newValue)
             })
-        }
+            gates=updatedGate
          DrawGatesAndPort()
     }
     
@@ -216,6 +214,7 @@
         btn.addEventListener('click', (e) => {
           
             type=e.target.id
+            console.log(type)
             handleClick(e)
         });
     });
