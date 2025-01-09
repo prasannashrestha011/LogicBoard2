@@ -13,11 +13,23 @@ function updatePortValues(gate,clickedPort,newValue){
        
         return gate 
     }
-    console.log(gate)
+  
     const outputValue=calculateOutput(gate.type,updatedInputPorts)
     const updatedOutputPort={...gate.output,value:outputValue}
-    console.log("bugged output ",updatedOutputPort.value)
-    console.log(connections)
+  
+    connections.forEach(conn=>{
+        if(conn.start.id==gate.output.id){
+            const targetedGate=gates.find(g=>(
+                g.inputs.some(p=>p.id==conn.end.id)
+            ))
+            if(targetedGate){
+                targetedGate.inputs=targetedGate.inputs.map((p)=>(
+                    p.id==conn.end.id?{...p,value:outputValue}:p
+                ))
+                targetedGate.output.value=calculateOutput(targetedGate.type,targetedGate.inputs)
+            }
+        }
+    })
    return {
     ...gate,
     inputs: updatedInputPorts,

@@ -14,6 +14,7 @@ function isPointedOnGate(gate,point){
     );
 }
 const isPointInPortNode=(point,port)=>{
+
     const {position,width,height}=port
     if(!width || !height) return false
     const left = position.x - width/2;
