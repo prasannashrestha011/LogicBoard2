@@ -35,9 +35,11 @@ body, html {
 @media (max-width: 768px) {
     .main {
         flex-direction: column; /* Switch to column layout for mobile */
-        overflow: hidden;
+       
     }
-    
+    #myCanvas{
+        width: 98%;
+    }
     .btn-nav{
         display: flex;
         flex-direction: row;

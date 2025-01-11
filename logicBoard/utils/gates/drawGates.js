@@ -15,19 +15,19 @@
 
     ctx.stroke()
    // Set the fill style
-    ctx.fillStyle = "blue";
+    ctx.strokeStyle = "blue";
 
 // Begin path for the AND gate
     ctx.beginPath();
-    ctx.moveTo(gate.position.x + 2, gate.position.y - 18);
-    ctx.lineTo(gate.position.x + 2, gate.position.y + 17.3);
-    ctx.arc(gate.position.x + 17, gate.position.y, 17, Math.PI / 2, (3 * Math.PI) / 2, true);
+    ctx.moveTo(gate.position.x +15, gate.position.y -25);
+    ctx.lineTo(gate.position.x+15 ,gate.position.y+gate.height);
+    ctx.quadraticCurveTo(gate.position.x+gate.width,gate.position.y,gate.position.x+15,gate.position.y-gate.height)
     ctx.closePath();
-    ctx.fill();
+    ctx.stroke();
 
     //for end line
     ctx.beginPath()
-    ctx.moveTo(gate.position.x+34,gate.position.y)
+    ctx.moveTo(gate.position.x+69,gate.position.y)
     ctx.lineTo(gate.output.position.x,gate.output.position.y)
     ctx.stroke()
 

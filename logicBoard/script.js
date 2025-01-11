@@ -238,10 +238,11 @@
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
     canvas.addEventListener('mouseup',handleMouseUp)
-
+    canvas.addEventListener('mouseleave',handleMouseUp)
     canvas.addEventListener('touchstart',handleTouchStart)
     canvas.addEventListener('touchmove',handleTouchMove)
     canvas.addEventListener('touchend',handleTouchEnd)
+    canvas.addEventListener('touchcancel',handleTouchEnd)
     canvas.addEventListener('click',handleClickOnCanvasArea)
    
 
