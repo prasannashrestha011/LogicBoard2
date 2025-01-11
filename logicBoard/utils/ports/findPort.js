@@ -24,3 +24,23 @@ function findPortOfGate(x,y){
     }
     return null;
 }
+function findTportOfConn(x,y){
+    let touchedConnection=null
+    touchedConnection=connections.find(conn=>{
+       const distance=calDistance(conn.tPort,{x,y})
+       return distance<=conn.tPort.radius
+   })
+   return touchedConnection.tPort
+}
+function defTport(startPort,endPort){
+    return {
+        id:`${startPort.id}-${endPort.id}`,
+        position:{
+            x:(startPort.position.x+endPort.position.x)/2,
+            y:(startPort.position.y+endPort.position.y)/2
+        },
+        value:startPort,
+        radius:startPort.radius/1.5,
+        type:"t-port"
+    }
+}

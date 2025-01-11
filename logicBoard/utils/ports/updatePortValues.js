@@ -12,14 +12,14 @@ function updatePortValues(gate, clickedPort, newValue) {
     });
 
     if (!hasConnection) {
-        return gate; // No update needed if there's no connection.
+        return gate; 
     }
 
     const outputValue = calculateOutput(gate.type, updatedInputPorts);
     const updatedOutputPort = { ...gate.output, value: outputValue };
 
    
-    // Start propagation from the current gate.
+
     propagateUpdates(outputValue, gate.output.id);
 
     return {
@@ -28,7 +28,7 @@ function updatePortValues(gate, clickedPort, newValue) {
         output: updatedOutputPort,
     };
 }
- // Recursive function to propagate updates.
+
  function propagateUpdates(outputValue, outputId, visited = new Set()) {
     if (visited.has(outputId)) return; 
 

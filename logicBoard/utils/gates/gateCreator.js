@@ -132,32 +132,43 @@ function updatePortPosition(port,newPosition){
 }
 function updateGateConnectionsPosition(connections, updatedGate) {
     return connections.map((conn) => {
-        // Check if the connection's start matches any of the gate's input ports or output port
+        return propogateGateConnection(conn,updatedGate)
+    });
+}
+function propogateGateConnection(conn,updatedGate){
+            // Check if the connection's start matches any of the gate's input ports or output port
         const startMatch = updatedGate.inputs.find((port) => port.id === conn.start.id) || 
-                           (updatedGate.output.id === conn.start.id ? updatedGate.output : null);
+        (updatedGate.output.id === conn.start.id ? updatedGate.output : null);
         const endMatch = updatedGate.inputs.find((port) => port.id === conn.end.id) || 
-                         (updatedGate.output.id === conn.end.id ? updatedGate.output : null);
+        (updatedGate.output.id === conn.end.id ? updatedGate.output : null);
 
         // Update the positions if there is a match
         const updatedStartPort = startMatch ? { ...conn.start, position: startMatch.position } : conn.start;
         const updatedEndPort = endMatch ? { ...conn.end, position: endMatch.position } : conn.end;
-
+       
         return {
-            start: updatedStartPort,
-            end: updatedEndPort,
+
+        start: updatedStartPort,
+        end: updatedEndPort,
+       
         };
-    });
 }
  function updatePortConnectionPosition(prevConnection,updatePort){
     return prevConnection.map(conn=>{
-        const startMatch=conn.start.id===updatePort.id
-        const endMatch=conn.end.id===updatePort.id
-
-        const updatedStartPort=startMatch?{...conn.start,position:updatePort.position}:conn.start 
-        const updatedEndPort=endMatch?{...conn.end,position:updatePort.position}:conn.end
-        return {
-            start:updatedStartPort,
-            end:updatedEndPort
-        }
+       return propogatePortConnection(conn,updatePort)
     })
+}
+function propogatePortConnection(conn,updatePort){
+    const startMatch=conn.start.id===updatePort.id
+    const endMatch=conn.end.id===updatePort.id
+
+    const updatedStartPort=startMatch?{...conn.start,position:updatePort.position}:conn.start 
+    const updatedEndPort=endMatch?{...conn.end,position:updatePort.position}:conn.end
+ 
+    return {
+       
+        start:updatedStartPort,
+        end:updatedEndPort,
+        
+    }
 }

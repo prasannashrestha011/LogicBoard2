@@ -85,33 +85,32 @@
             isDraggingPortNode=true
             selectedPort=clickedPortNode
         }
-
           // Single unified port check
-const clickedPort = findPort(x,y) || findPortOfGate(x,y);
-console.log("CLICKED POrt",clickedPort)
-if (clickedPort) {
-    selectedPort = clickedPort;
-    isDrawing = true;
-}
-      
+        const clickedPort = findPort(x,y) || findPortOfGate(x,y) 
+
+        if (clickedPort) {
+            selectedPort = clickedPort;
+            isDrawing = true;
+        }
+      console.log("Your t selected port ",clickedPort)
         
     }
     const onTouchMove = (x, y) => {
 
         if(!isDragging) return
         if(selectedGate){
-            console.log("in the para")
+    
             const updatedGate=updateGatePosition(selectedGate,{x,y})
         
             const gateIdx=gates.findIndex(gate=>gate.id==updatedGate.id)
             if(gateIdx==-1){
-                console.log("invalid idx")
+           
                 return
             }
             gates[gateIdx]=updatedGate
             console.log(updatedGate)
             connections=updateGateConnectionsPosition(connections,updatedGate)
-            console.log("updated connection ",connections)
+        
         }
         if(selectedPort && isDraggingPortNode){
             const updatedPortNode=updatePortPosition(selectedPort,{x,y})
@@ -140,16 +139,25 @@ if (clickedPort) {
         let targetedPort=null
          targetedPort=findPort(x,y) || findPortOfGate(x,y)
   
-        console.log("selected port ",selectedPort)
-            console.log("targeted port ",targetedPort)
+       
         if(selectedPort&&targetedPort){
-          
+           
             const isValidConnection=(selectedPort.id!==targetedPort.id)
             if(isValidConnection){
+                let startPort=selectedPort
+                let endPort=targetedPort
+                if(selectedPort.type=="gate-input" && targetedPort.type=="input"){
+                
+                    startPort=targetedPort
+                    endPort=selectedPort
+                }
+               
                 connections.push({
-                    start:selectedPort,
-                    end:targetedPort
+                    start:startPort,
+                    end:endPort,
+                   
                 })
+            
                 gates=gates.map(gate=>{
                     const updatedInputIdx=gate.inputs.findIndex(port=>port.id==targetedPort.id)
                     if(updatedInputIdx==-1) return  gate
@@ -161,20 +169,18 @@ if (clickedPort) {
                     const updatedOutputPort={...gate.output,value:updatedOutput}
                     return {...gate,inputs:updatedInputs,output:updatedOutputPort}
                 })
-
-
              
             }
        
         }
+        console.log(connections)
         DrawGatesAndPort()
-        
         isDrawing=false
        isDragging=false
        isDraggingPortNode=false
        selectedGate=null
         selectedPort=null
-        console.log("your conenctions",connections)
+     
     }
    
     const onTouchClick=(x,y)=>{
@@ -189,7 +195,6 @@ if (clickedPort) {
         }
         if(nodeType=="port"){
             const portType=type.split('-')[1]
-            
             createPort(portType,position)
         }
        
@@ -203,7 +208,7 @@ if (clickedPort) {
 
          const clickedPort=findPort(point.x,point.y)
        
-         console.log("your clicked port is here for toggle",clickedPort)
+        
          if(!clickedPort) return 
          const newValue=!clickedPort.value
          ports=ports.map(port=>{
