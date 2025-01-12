@@ -2,6 +2,7 @@
 let scale=1
  let canvas=null
  let ctx=null
+ let contextMenu=null
 
  let gates=[]
  let originalGates=[]
@@ -20,6 +21,8 @@ let scale=1
  document.addEventListener('DOMContentLoaded',()=>{
    
       canvas=document.querySelector('canvas')
+      contextMenu=document.getElementById('custom-menu')
+    const contextCmds=document.querySelector("menu-opt")
     const gateCmd=document.querySelectorAll('.btn')
 
    
@@ -92,7 +95,8 @@ let scale=1
         onTouchClick(x,y)
     }
     const handleClickOnCanvasArea=(e)=>{
-      
+        e.preventDefault()
+        contextMenu.style.display = 'none';
        if(wasDragging) return
         const {x,y}=getCanvasPoint(e.clientX,e.clientY)
         const worldCoords = toWorldCoords(x, y, scale);
@@ -109,7 +113,7 @@ let scale=1
         console.log('\n')
         console.log("new position ",x,y)
 
-        const clickedGate=gates.find(gate=>isPointedOnGate(gate,{x,y}))
+        const clickedGate=findGateNode(x,y)
   
         if(clickedGate){
          selectedGate=clickedGate
@@ -117,7 +121,7 @@ let scale=1
         }
       
         //for port dragging event 
-        const clickedPortNode=ports.find(port=>isPointInPortNode({x,y},port))
+        const clickedPortNode=findPortNode(x,y)
         if(clickedPortNode){
             isDraggingPortNode=true
             selectedPort=clickedPortNode
@@ -303,7 +307,15 @@ let scale=1
             handleClick(e)
         });
     });
- 
+    const handleContextMenu = (e) => {
+        const {x, y} = getCanvasPoint(e.clientX, e.clientY);
+       
+        
+        let targetedObject = findConnection(x, y) || findGateNode(x, y) || findPortNode(x, y);
+
+        console.log("your targeted object ",targetedObject)
+    };
+    
    
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
@@ -314,7 +326,15 @@ let scale=1
     canvas.addEventListener('touchend',handleTouchEnd)
     canvas.addEventListener('touchcancel',handleTouchEnd)
     canvas.addEventListener('click',handleClickOnCanvasArea)
-  
+    canvas.addEventListener('contextmenu',(e)=>{
+        e.preventDefault()
+   
+        
+        contextMenu.style.left = `${e.clientX}px`;
+        contextMenu.style.top = `${e.clientY}px`;
+        contextMenu.style.display = 'block';
+        handleContextMenu(e)
+    })
     canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
    // Use multiplication for smoother zooming

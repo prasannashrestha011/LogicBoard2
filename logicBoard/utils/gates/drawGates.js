@@ -1,5 +1,5 @@
  function DrawAndGate(gate){
-    ctx.fillStyle = 'blue'; 
+
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(gate.inputs[0].position.x,gate.inputs[0].position.y)
@@ -19,11 +19,14 @@
 
 // Begin path for the AND gate
     ctx.beginPath();
+    
     ctx.moveTo(gate.position.x +15, gate.position.y -25);
     ctx.lineTo(gate.position.x+15 ,gate.position.y+gate.height);
     ctx.quadraticCurveTo(gate.position.x+gate.width,gate.position.y,gate.position.x+15,gate.position.y-gate.height)
     ctx.closePath();
+    ctx.fill()
     ctx.stroke();
+    fillGateColor(gate)
 
     //for end line
     ctx.beginPath()
@@ -35,7 +38,7 @@
  function DrawORgate(gate){
     ctx.lineWidth=3
     ctx.beginPath()
-    ctx.fillStyle="blue"
+  
     ctx.moveTo(gate.inputs[0].position.x,gate.inputs[0].position.y)
     ctx.lineTo(gate.position.x,gate.position.y-15)
     ctx.moveTo(gate.inputs[1].position.x,gate.inputs[1].position.y)
@@ -47,14 +50,14 @@
     ctx.stroke()
     
     ctx.beginPath();
- 
+    
     ctx.moveTo(gate.position.x+4,gate.position.y-gate.height)
     ctx.quadraticCurveTo(gate.position.x+35,gate.position.y,gate.position.x+4,gate.position.y+gate.height)
  
     ctx.quadraticCurveTo(gate.position.x+gate.width,gate.position.y,gate.position.x+4,gate.position.y-gate.height)
-
-    ctx.stroke(); // Draws the outline
     
+    ctx.stroke(); // Draws the outline
+    fillGateColor(gate)
     //for end line
     ctx.beginPath()
     ctx.moveTo(gate.position.x+60,gate.position.y)
@@ -72,13 +75,14 @@
     ctx.stroke()
 
     ctx.beginPath();
+    
     ctx.fillStyle="blue"
     ctx.moveTo(gate.position.x+4,gate.position.y-15)
     ctx.lineTo(gate.position.x+34,gate.position.y)
     ctx.lineTo(gate.position.x+4,gate.position.y+15)
-    ctx.fill()
-    ctx.stroke(); 
 
+    ctx.stroke(); 
+    fillGateColor(gate)
     DrawNod(gate)
 
     //for end line 
@@ -90,13 +94,13 @@
 
  function DrawNanDGate(gate){
     DrawAndGate(gate)
-
+    fillGateColor(gate)
         DrawNod(gate)
-     
+      
 }
  function DrawNorGate(gate){
     DrawORgate(gate)
-
+    fillGateColor(gate)
     DrawNod(gate)
 
    
@@ -108,7 +112,7 @@
 
         ctx.lineWidth = 2;
        DrawORgate(gate)
-
+       fillGateColor(gate)
         //for second line
         ctx.beginPath()
         ctx.moveTo(gate.position.x,gate.position.y-gate.height+5)
@@ -126,5 +130,18 @@ function DrawNod(gate){
     ctx.beginPath()
     ctx.fillStyle="black"
     ctx.arc(gate.output.position.x-22,gate.output.position.y,4,0,Math.PI*2)
+    ctx.fill()
+}
+
+function fillGateColor(gate){
+    const gradient = ctx.createLinearGradient(
+        gate.position.x, 
+        gate.position.y, 
+        gate.position.x + gate.width, 
+        gate.position.y
+    );
+    gradient.addColorStop(0,"#34715C")
+    gradient.addColorStop(1,"#F9FAFF")
+    ctx.fillStyle = gradient;
     ctx.fill()
 }

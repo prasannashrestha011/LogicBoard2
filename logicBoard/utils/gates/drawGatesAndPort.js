@@ -8,13 +8,13 @@ function DrawGatesAndPort(){
     gates.map(gate=>{
         gate.inputs.map(port=>{
             ctx.beginPath()
-            ctx.fillStyle=port.value?"red":"black"
+            ctx.fillStyle=port.value?"#80461B":"#28282B"
             ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
             ctx.fill()
         })
         //@@ for output port 
         ctx.beginPath()
-        ctx.fillStyle=gate.output.value?"red":"black"
+        ctx.fillStyle=gate.output.value?"#80461B":"#28282B"
         ctx.arc(gate.output.position.x,gate.output.position.y,gate.output.radius,0,Math.PI*2)
         ctx.fill()
         if(gate.type=="and"){
@@ -40,10 +40,12 @@ function DrawGatesAndPort(){
 
     connections.map(conn=>{
         ctx.beginPath()
+        ctx.lineWidth=5
         ctx.strokeStyle="black"
         ctx.moveTo(conn.start.position.x,conn.start.position.y)
    
-        ctx.lineTo(conn.end.position.x,conn.end.position.y)
+  
+        ctx.quadraticCurveTo(conn.start.position.x+80,conn.start.position.y-50,conn.end.position.x,conn.end.position.y)
         ctx.stroke()
      
        
@@ -58,7 +60,7 @@ function DrawGatesAndPort(){
         ctx.stroke();
 
         ctx.beginPath()
-        ctx.fillStyle=port.value?"red":"black"
+         ctx.fillStyle=port.value?"#80461B":"#28282B"
         ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
         ctx.fill()
     })

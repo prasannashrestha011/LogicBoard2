@@ -33,3 +33,22 @@ const isPointInPortNode=(point,port)=>{
     return isInsideTheRectangle && !isInPortDistance
 
  }
+ //for context menu
+ function findConnection(x,y){
+    connections.forEach(conn => {
+        const { start, end } = conn;
+        const distance = getDistanceFromLine(x, y, start.position.x, start.position.y, end.position.x, end.position.y);
+        const threshold = 55;
+        console.log(distance)
+        if (distance < threshold) {
+          
+            clickedConnection = conn; // Update the clickedConnection
+        }
+    });
+ }
+ function findGateNode(x,y){
+    return gates.find(gate=>isPointedOnGate(gate,{x,y}))
+ }
+ function findPortNode(x,y){
+    return ports.find(port=>isPointInPortNode({x,y},port))
+ }
