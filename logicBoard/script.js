@@ -26,6 +26,8 @@ let scale=1
       contextMenu=document.getElementById('custom-menu')
     const contextCmds=document.querySelectorAll(".menu-opt")
     const gateCmd=document.querySelectorAll('.btn')
+    const zoomSlider=document.getElementById('zoom-handler')
+
      ctx=canvas.getContext('2d')
      DrawGatesAndPort()
    
@@ -202,17 +204,19 @@ let scale=1
             
             
             if(isValidConnection){
-                let startPort=selectedPort
-                let endPort=targetedPort
+            
                 if(selectedPort.type=="gate-input" && targetedPort.type=="input"){
-                
-                    startPort=targetedPort
-                    endPort=selectedPort
+                    // swapping the port values to align with targeted result 
+                    let tempPort=selectedPort
+
+                    selectedPort=targetedPort
+                    targetedPort=tempPort
+                  
                 }
                
                 connections.push({
-                    start:startPort,
-                    end:endPort,
+                    start:selectedPort,
+                    end:targetedPort,
                    
                 })
             
@@ -379,13 +383,23 @@ let scale=1
    const zoomIntensity = 0.1;
    const zoomFactor = e.deltaY < 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
    
-   scale *= zoomFactor;
-   console.log(scale)
-   // Add limits to prevent extreme scaling
-   scale = Math.min(Math.max(0.1, scale), 5.0);
 
+   scale *= zoomFactor;
+ 
+   // Add limits to prevent extreme scaling
+   scale = Math.min(Math.max(0.1, scale), 5.5);
+   console.log(zoomFactor)
+   zoomSlider.value=scale
 
         DrawGatesAndPort()
     });
+    zoomSlider.addEventListener('input', (e) => {
+       
+    
+        scale = zoomSlider.value;  // Directly set the scale to the current zoom level
+    
+        DrawGatesAndPort();  // Call your drawing function with the updated scale
+    });
+    
 
  })

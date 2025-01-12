@@ -96,6 +96,12 @@ body, html {
     background: #f0f0f0;
   }
 
+  #zoom-handler{
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    width: fit-content;
+  }
 @media (max-width: 768px) {
     .main {
         flex-direction: column; /* Switch to column layout for mobile */
@@ -103,6 +109,9 @@ body, html {
     }
     #myCanvas{
         width: 98%;
+    }
+    #zoom-handler{
+        display: none;
     }
     .btn-nav{
         display: flex;
