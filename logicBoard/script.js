@@ -1,9 +1,10 @@
 
-
+let scale=1
  let canvas=null
  let ctx=null
 
  let gates=[]
+ let originalGates=[]
  let ports=[]
  let connections=[]
  let type=""
@@ -15,30 +16,76 @@
  let isDraggingPortNode=false // @@ for dragging the outer area of node only @@
  let wasDragging=false
  let isDrawing=false
+
  document.addEventListener('DOMContentLoaded',()=>{
    
       canvas=document.querySelector('canvas')
     const gateCmd=document.querySelectorAll('.btn')
 
+    function toScreenCoords(x, y, scale) {
+        const canvasRect = canvas.getBoundingClientRect();
+        return {
+            x: (x - canvas.width/2) * scale + canvas.width/2,
+            y: (y - canvas.height/2) * scale + canvas.height/2
+        };
+    }
+    
+    function toWorldCoords(screenX, screenY, scale) {
+        const canvasRect = canvas.getBoundingClientRect();
+        return {
+            x: (screenX - canvas.width/2) / scale + canvas.width/2,
+            y: (screenY - canvas.height/2) / scale + canvas.height/2
+        };
+    }
+
+
 
      ctx=canvas.getContext('2d')
      DrawGatesAndPort()
    
-    const handleMouseDown=(e)=>{
-        wasDragging=false
-        const  {x,y}=getCanvasPoint(e.clientX,e.clientY)
-        onTouchStart(x,y)
-    }
-    const handleMouseMove=(e)=>{
-        const  {x,y}=getCanvasPoint(e.clientX,e.clientY)
-        wasDragging=true
-        onTouchMove(x,y)
-    }
-    const handleMouseUp=(e)=>{
-      
-        const {x,y}=getCanvasPoint(e.clientX,e.clientY)
-        onTouchEnd(x,y)
-    }
+     const handleMouseDown = (e) => {
+        wasDragging = false;
+    
+        // Convert screen coordinates to canvas point
+        const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
+    
+        // Convert screen point to world coordinates
+        const worldCoords = toWorldCoords(screenX, screenY, scale);
+    
+        // Check for the clicked gate in world space
+        const clickedGate = gates.find(gate => isPointedOnGate(gate, worldCoords));
+    
+        selectedGate = clickedGate;
+        console.log("clicked gate", clickedGate);
+    
+        // Pass the world coordinates to touch start
+        onTouchStart(worldCoords.x, worldCoords.y);
+    };
+    
+    const handleMouseMove = (e) => {
+        wasDragging = true;
+    
+        // Convert screen coordinates to canvas point
+        const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
+    
+        // Convert screen point to world coordinates
+        const worldCoords = toWorldCoords(screenX, screenY, scale);
+    
+        // Pass the world coordinates to touch move
+        onTouchMove(worldCoords.x, worldCoords.y);
+    };
+    
+    const handleMouseUp = (e) => {
+        // Convert screen coordinates to canvas point
+        const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
+    
+        // Convert screen point to world coordinates
+        const worldCoords = toWorldCoords(screenX, screenY, scale);
+    
+        // Pass the world coordinates to touch end
+        onTouchEnd(worldCoords.x, worldCoords.y);
+    };
+    
 
     const handleTouchStart=(e)=>{
         const clientX=e.touches[0].clientX
@@ -73,12 +120,16 @@
     }
     const onTouchStart=(x,y)=>{
         isDragging=true
-        
+        console.log('\n')
+        console.log("new position ",x,y)
+
         const clickedGate=gates.find(gate=>isPointedOnGate(gate,{x,y}))
+  
         if(clickedGate){
          selectedGate=clickedGate
             return 
         }
+      
         //for port dragging event 
         const clickedPortNode=ports.find(port=>isPointInPortNode({x,y},port))
         if(clickedPortNode){
@@ -92,7 +143,7 @@
             selectedPort = clickedPort;
             isDrawing = true;
         }
-      console.log("Your t selected port ",clickedPort)
+    
         
     }
     const onTouchMove = (x, y) => {
@@ -108,7 +159,7 @@
                 return
             }
             gates[gateIdx]=updatedGate
-            console.log(updatedGate)
+ 
             connections=updateGateConnectionsPosition(connections,updatedGate)
         
         }
@@ -121,7 +172,7 @@
         }
         DrawGatesAndPort()
         //@@ for drawing tempo lines (connectors)
-        console.log(isDrawing)
+       
         if(selectedPort && isDrawing){
         ctx.beginPath();
         ctx.strokeStyle = "blue";
@@ -171,16 +222,16 @@
                 })
              
             }
-       
+           
         }
-        console.log(connections)
-        DrawGatesAndPort()
+  
+       
         isDrawing=false
        isDragging=false
        isDraggingPortNode=false
        selectedGate=null
         selectedPort=null
-     
+        DrawGatesAndPort()
     }
    
     const onTouchClick=(x,y)=>{
@@ -230,11 +281,12 @@
         btn.addEventListener('click', (e) => {
           
             type=e.target.id
-            console.log(type)
+           
             handleClick(e)
         });
     });
-    
+ 
+   
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
     canvas.addEventListener('mouseup',handleMouseUp)
@@ -244,6 +296,20 @@
     canvas.addEventListener('touchend',handleTouchEnd)
     canvas.addEventListener('touchcancel',handleTouchEnd)
     canvas.addEventListener('click',handleClickOnCanvasArea)
+  
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+   // Use multiplication for smoother zooming
+   const zoomIntensity = 0.1;
+   const zoomFactor = e.deltaY < 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
    
+   scale *= zoomFactor;
+   console.log(scale)
+   // Add limits to prevent extreme scaling
+   scale = Math.min(Math.max(0.1, scale), 5.0);
+
+
+        DrawGatesAndPort()
+    });
 
  })

@@ -1,5 +1,10 @@
 function DrawGatesAndPort(){
     ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.scale(scale, scale);
+    ctx.translate(-canvas.width/2, -canvas.height/2);
+  
     gates.map(gate=>{
         gate.inputs.map(port=>{
             ctx.beginPath()
@@ -57,4 +62,5 @@ function DrawGatesAndPort(){
         ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
         ctx.fill()
     })
+    ctx.restore()
 }

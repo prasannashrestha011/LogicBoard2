@@ -51,7 +51,7 @@ function createGate(type,position){
                 position:{x:position.x+notXoffset*2+35,y:position.y},
             }
          }
-         gates.push(newGate)
+        
          return
     }
      const newGate={
@@ -83,55 +83,52 @@ function createGate(type,position){
      }
    
      gates.push(newGate)
- 
+     originalGates.push(newGate)
 }
-function updateGatePosition(gate,newPosition){
-    const minMargin = 10;
-    const gateWidth = 70;
-    const gateHeight = 40;
+function updateGatePosition(gate, newPosition) {
+  
 
-    const clampedPosition = {
-        x: Math.max(minMargin, Math.min(newPosition.x, canvas.width - gateWidth - minMargin)),
-        y: Math.max(minMargin, Math.min(newPosition.y, canvas.height - gateHeight - minMargin))
-    };
+  
+
+    // Update input ports based on clamped position
     const updatedInputPorts = gate.inputs.map((port, idx) => {
         const portPosition = {
-            x: gate.type === "not" 
-                ? clampedPosition.x - notXoffset 
-                : clampedPosition.x - Xoffset,
+            x: gate.type === "not"
+                ? newPosition.x - notXoffset
+                : newPosition.x - Xoffset,
             y: gate.type === "not"
-                ? clampedPosition.y
-                : (idx === 0 
-                    ? clampedPosition.y - Yoffset 
-                    : clampedPosition.y + Yoffset)
+                ? newPosition.y
+                : (idx === 0
+                    ? newPosition.y - Yoffset
+                    : newPosition.y + Yoffset)
         };
-       
+
         return {
             ...port,
             position: portPosition
         };
     });
-    
+
     // Update output port
     const updatedOutputPort = {
         ...gate.output,
         position: {
-            x: clampedPosition.x + outputOffset * 2 + 35,
-            y: clampedPosition.y
+            x: newPosition.x + outputOffset * 2 + 35,
+            y: newPosition.y
         }
     };
-    
-    console.log('Output port position:', updatedOutputPort.position);
-    
+
     const updatedGate = {
         ...gate,
-        position: clampedPosition,
+        position: newPosition,
         inputs: updatedInputPorts,
         output: updatedOutputPort
     };
+
     
     return updatedGate;
 }
+
 
 function createPort(type,position){
     const id=counter++
