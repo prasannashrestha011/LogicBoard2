@@ -65,28 +65,26 @@ let scale=1
         // Pass the world coordinates to touch end
         onTouchEnd(worldCoords.x, worldCoords.y);
     };
-    
-
     const handleTouchStart=(e)=>{
         const clientX=e.touches[0].clientX
         const clientY=e.touches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        const worldCoords = toWorldCoords(x, y, scale);
-        onTouchStart(worldCoords.x, worldCoords.y);
+      
+        onTouchStart(x,y);
     }
     const handleTouchMove=(e)=>{
         const clientX=e.touches[0].clientX
         const clientY=e.touches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        const worldCoords = toWorldCoords(x, y, scale);
-        onTouchMove(worldCoords.x, worldCoords.y)
+   
+        onTouchMove(x,y)
     }
     const handleTouchEnd=(e)=>{
         const clientX=e.changedTouches[0].clientX
         const clientY=e.changedTouches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        const worldCoords = toWorldCoords(x, y, scale);
-        onTouchEnd(worldCoords.x, worldCoords.y)
+        
+        onTouchEnd(x,y)
     }
     const handleClick=(e)=>{
    
