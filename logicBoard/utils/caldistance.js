@@ -1,6 +1,5 @@
- const calDistance=(port,point)=>{
-
-    const distance= Math.sqrt(Math.pow(port.position.x-point.x,2)+Math.pow(port.position.y-point.y,2))
-    return distance
+function calDistance(port, point) {
+    const dx = point.x - port.position.x;
+    const dy = point.y - port.position.y;
+    return Math.sqrt(dx * dx + dy * dy);
 }
-

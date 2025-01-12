@@ -22,21 +22,7 @@ let scale=1
       canvas=document.querySelector('canvas')
     const gateCmd=document.querySelectorAll('.btn')
 
-    function toScreenCoords(x, y, scale) {
-        const canvasRect = canvas.getBoundingClientRect();
-        return {
-            x: (x - canvas.width/2) * scale + canvas.width/2,
-            y: (y - canvas.height/2) * scale + canvas.height/2
-        };
-    }
-    
-    function toWorldCoords(screenX, screenY, scale) {
-        const canvasRect = canvas.getBoundingClientRect();
-        return {
-            x: (screenX - canvas.width/2) / scale + canvas.width/2,
-            y: (screenY - canvas.height/2) / scale + canvas.height/2
-        };
-    }
+   
 
 
 
@@ -52,11 +38,6 @@ let scale=1
         // Convert screen point to world coordinates
         const worldCoords = toWorldCoords(screenX, screenY, scale);
     
-        // Check for the clicked gate in world space
-        const clickedGate = gates.find(gate => isPointedOnGate(gate, worldCoords));
-    
-        selectedGate = clickedGate;
-        console.log("clicked gate", clickedGate);
     
         // Pass the world coordinates to touch start
         onTouchStart(worldCoords.x, worldCoords.y);
@@ -64,14 +45,13 @@ let scale=1
     
     const handleMouseMove = (e) => {
         wasDragging = true;
-    
-        // Convert screen coordinates to canvas point
+   
         const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
     
-        // Convert screen point to world coordinates
+      
         const worldCoords = toWorldCoords(screenX, screenY, scale);
     
-        // Pass the world coordinates to touch move
+        
         onTouchMove(worldCoords.x, worldCoords.y);
     };
     
@@ -117,7 +97,12 @@ let scale=1
       
        if(wasDragging) return
         const {x,y}=getCanvasPoint(e.clientX,e.clientY)
-        togglePortValue({x,y})
+        const worldCoords = toWorldCoords(x, y, scale);
+        const point={
+            x:worldCoords.x,
+            y:worldCoords.y
+        }
+        togglePortValue(point)
       
     
     }
@@ -175,15 +160,31 @@ let scale=1
         }
         DrawGatesAndPort()
         //@@ for drawing tempo lines (connectors)
-       
         if(selectedPort && isDrawing){
-        ctx.beginPath();
-        ctx.strokeStyle = "blue";
-        ctx.lineWidth = 2;
-        ctx.moveTo(selectedPort.position.x, selectedPort.position.y);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-       
+            
+            ctx.save()
+            
+           
+            ctx.translate(canvas.width/2, canvas.height/2)
+            ctx.scale(scale, scale)
+            ctx.translate(-canvas.width/2, -canvas.height/2)
+            
+           
+            ctx.beginPath()
+            ctx.strokeStyle = "blue"
+            ctx.lineWidth = 2/scale 
+            
+            
+            const startX = selectedPort.position.x
+            const startY = selectedPort.position.y
+            
+           
+            ctx.moveTo(startX, startY)
+            ctx.lineTo(x, y)
+            ctx.stroke()
+            
+           
+            ctx.restore()
         }
     
        
