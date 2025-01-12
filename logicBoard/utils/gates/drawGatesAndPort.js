@@ -58,20 +58,16 @@ function DrawGatesAndPort(){
         const rectX=(port.position.x-port.width/2-XOFFSET)
         const rectY=port.position.y-port.height/2
         ctx.lineWidth=2
-        ctx.beginPath();
-        ctx.strokeStyle = "black";
-        ctx.rect(rectX, rectY, port.width, port.height);
-        ctx.stroke();
+      
+        roundRect(ctx,rectX,rectY,port.width,port.height,5)
+    
 
         const subRectWidth = port.width / 2;
         const subRectHeight = port.height / 2;
         const subRectX = rectX + (port.width - subRectWidth) / 2;
         const subRectY = rectY + (port.height - subRectHeight) / 2;
     
-        ctx.beginPath();
-        ctx.strokeStyle = "blue";
-        ctx.rect(subRectX, subRectY, subRectWidth, subRectHeight);
-        ctx.stroke();
+        roundRect(ctx, subRectX, subRectY, subRectWidth, subRectHeight, 12);
 
         ctx.beginPath();
         ctx.fillStyle="red"
