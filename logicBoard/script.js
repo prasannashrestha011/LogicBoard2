@@ -114,6 +114,7 @@ let scale=1
   
         if(clickedGate){
          selectedGate=clickedGate
+         targetedObject=clickedGate
             return 
         }
       
@@ -130,7 +131,7 @@ let scale=1
             selectedPort = clickedPort;
             isDrawing = true;
         }
-    
+    targetedObject=selectedPort
         
     }
     const onTouchMove = (x, y) => {
@@ -313,10 +314,20 @@ let scale=1
     })
     const handleContextMenuAction=(option)=>{
         if(!targetedObject || !option) return 
+        console.log(targetedObject)
         if(gates.includes(targetedObject)){
            const targetedIdx=gates.indexOf(targetedObject)
            if(targetedIdx==-1) return 
            gates.splice(targetedIdx,1)
+           
+           //@@ removes the connection if user delete the connected gates
+           connections = connections.filter(conn => 
+            !targetedObject.inputs.some(port => 
+                conn.start.id === port.id || conn.end.id === port.id
+            )
+        );
+        
+    
         }
         if(connections.includes(targetedObject)){
             const targetedIdx=connections.indexOf(targetedObject)
@@ -329,6 +340,7 @@ let scale=1
             ports.splice(targetedIdx,1)
         }
         contextMenu.style.display = 'none';
+        targetedObject=null
         DrawGatesAndPort()
     }
     const handleContextMenu = (e) => {
