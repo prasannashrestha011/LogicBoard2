@@ -2,7 +2,9 @@
 let scale=1
  let canvas=null
  let ctx=null
+ 
  let contextMenu=null
+ let targetedObject=null
 
  let gates=[]
  let originalGates=[]
@@ -22,13 +24,8 @@ let scale=1
    
       canvas=document.querySelector('canvas')
       contextMenu=document.getElementById('custom-menu')
-    const contextCmds=document.querySelector("menu-opt")
+    const contextCmds=document.querySelectorAll(".menu-opt")
     const gateCmd=document.querySelectorAll('.btn')
-
-   
-
-
-
      ctx=canvas.getContext('2d')
      DrawGatesAndPort()
    
@@ -307,11 +304,38 @@ let scale=1
             handleClick(e)
         });
     });
+    contextCmds.forEach((option)=>{
+        option.addEventListener('click',(e)=>{
+            type=e.target.id 
+            console.log("cmd type ",type)
+            handleContextMenuAction(type.split('-')[1])
+        })
+    })
+    const handleContextMenuAction=(option)=>{
+        if(!targetedObject || !option) return 
+        if(gates.includes(targetedObject)){
+           const targetedIdx=gates.indexOf(targetedObject)
+           if(targetedIdx==-1) return 
+           gates.splice(targetedIdx,1)
+        }
+        if(connections.includes(targetedObject)){
+            const targetedIdx=connections.indexOf(targetedObject)
+            if(targetedIdx==-1) return 
+            connections.splice(targetedIdx,1)
+        }
+        if(ports.includes(targetedObject)){
+            const targetedIdx=ports.indexOf(targetedObject)
+            if(targetedIdx==-1) return 
+            ports.splice(targetedIdx,1)
+        }
+        contextMenu.style.display = 'none';
+        DrawGatesAndPort()
+    }
     const handleContextMenu = (e) => {
         const {x, y} = getCanvasPoint(e.clientX, e.clientY);
        
         
-        let targetedObject = findConnection(x, y) || findGateNode(x, y) || findPortNode(x, y);
+         targetedObject = findConnection(x, y) || findGateNode(x, y) || findPortNode(x, y);
 
         console.log("your targeted object ",targetedObject)
     };

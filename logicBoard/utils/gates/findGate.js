@@ -35,6 +35,7 @@ const isPointInPortNode=(point,port)=>{
  }
  //for context menu
  function findConnection(x,y){
+    let targetedConnection=null
     connections.forEach(conn => {
         const { start, end } = conn;
         const distance = getDistanceFromLine(x, y, start.position.x, start.position.y, end.position.x, end.position.y);
@@ -42,9 +43,11 @@ const isPointInPortNode=(point,port)=>{
         console.log(distance)
         if (distance < threshold) {
           
-            clickedConnection = conn; // Update the clickedConnection
+            targetedConnection = conn; // Update the clickedConnection
+
         }
     });
+    return targetedConnection
  }
  function findGateNode(x,y){
     return gates.find(gate=>isPointedOnGate(gate,{x,y}))
