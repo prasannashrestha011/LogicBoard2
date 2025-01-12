@@ -251,6 +251,14 @@ let scale=1
             const portType=type.split('-')[1]
             createPort(portType,position)
         }
+        if(nodeType=="zoom"){
+            const zoomIntensity = 0.1;
+           const zoomType=type.split('-')[1]
+           console.log(zoomType)
+            const zoomFactor=zoomType=="in"?(1+zoomIntensity):(1-zoomIntensity)
+            scale *=zoomFactor
+            scale = Math.min(Math.max(0.1, scale), 5.0);
+        }
        
         DrawGatesAndPort()
 
