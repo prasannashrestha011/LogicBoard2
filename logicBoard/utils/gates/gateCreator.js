@@ -38,6 +38,7 @@ function createGate(type,position){
                 {
                     id:`gate-input-port-${id}`,
                    ...portTemplate,
+                   value:null,
                    position:{x:position.x-notXoffset,y:position.y},
                    type:"gate-input",
                  

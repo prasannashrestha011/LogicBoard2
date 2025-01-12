@@ -3,16 +3,38 @@ body, html {
     padding: 0;
     overflow: hidden;
 }
-.btn{
-    width: 20rem;
-}
-.btn-nav{
+.btn {
+   
+    pointer-events: auto; /* Ensure the button is clickable */
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    position: relative; /* Ensure proper stacking context */
+    z-index: 1; /* Ensure the button is above other content */
+}
+
+.btn span, 
+.btn img {
+    pointer-events: none; /* Prevent child content from blocking button click */
+}
+
+
+
+.imgs{
+    width: 5rem;
+}
+.btn-nav{
+    
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 20rem;
     height: fit-content;
 }
 .main{
+    font-family:'Courier New', Courier, monospace ;
     display: flex;
    
 }
