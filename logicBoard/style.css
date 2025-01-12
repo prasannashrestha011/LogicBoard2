@@ -3,8 +3,19 @@ body, html {
     padding: 0;
     overflow: hidden;
 }
+.nav-header{
+    width: 100%;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.4rem;
+    background:linear-gradient(to bottom,#02545E,#2D1B7C);
+    color: aliceblue;
+}
 .btn {
-   
+  
     pointer-events: auto; /* Ensure the button is clickable */
     display: flex;
     flex-direction: column;
@@ -14,6 +25,11 @@ body, html {
     font-weight: bolder;
     position: relative; /* Ensure proper stacking context */
     z-index: 1; /* Ensure the button is above other content */
+    background: linear-gradient(to bottom,#A5A5A5,#F9FAFF);
+    border: 0.5px solid #092B1F;
+}
+.btn:active{
+    background: linear-gradient(to bottom,#34715C,#F9FAFF);
 }
 
 .btn span, 
@@ -31,6 +47,7 @@ body, html {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 20rem;
+   
     height: fit-content;
 }
 .main{
@@ -51,6 +68,7 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
+   
     background-image: 
     linear-gradient(to right, #c2c2c2 1px, transparent 1px),
     linear-gradient(to bottom, #c2c2c2 1px, transparent 1px);
