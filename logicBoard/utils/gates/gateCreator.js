@@ -51,7 +51,7 @@ function createGate(type,position){
                 position:{x:position.x+notXoffset*2+35,y:position.y},
             }
          }
-        
+         gates.push(newGate)
          return
     }
      const newGate={
@@ -83,6 +83,7 @@ function createGate(type,position){
      }
    
      gates.push(newGate)
+
      originalGates.push(newGate)
 }
 function updateGatePosition(gate, newPosition) {

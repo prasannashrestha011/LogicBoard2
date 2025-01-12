@@ -196,8 +196,15 @@ let scale=1
   
        
         if(selectedPort&&targetedPort){
-           
-            const isValidConnection=(selectedPort.id!==targetedPort.id)
+            const hasInputConnections=(   connections.some(conn=>conn.start.id===selectedPort.id || conn.end.id===selectedPort.id) ||
+            connections.some(conn=>conn.start.id===targetedPort.id || conn.end.id===targetedPort.id) ) && selectedPort.type=="input"
+         
+
+          
+       
+            const isValidConnection=(selectedPort.id!==targetedPort.id) && !hasInputConnections
+            
+            
             if(isValidConnection){
                 let startPort=selectedPort
                 let endPort=targetedPort
@@ -242,9 +249,10 @@ let scale=1
 
         const nodeType=type.split('-')[0]
         const position=generateRandomPosition()
+   
         if(nodeType=="gate"){
             const gateType=type.split('-')[1]
-         
+            console.log(gateType)
             createGate(gateType,position)
            
         }
