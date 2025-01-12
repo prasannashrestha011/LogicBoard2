@@ -91,19 +91,22 @@ let scale=1
         const clientX=e.touches[0].clientX
         const clientY=e.touches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        onTouchStart(x,y)
+        const worldCoords = toWorldCoords(x, y, scale);
+        onTouchStart(worldCoords.x, worldCoords.y);
     }
     const handleTouchMove=(e)=>{
         const clientX=e.touches[0].clientX
         const clientY=e.touches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        onTouchMove(x,y)
+        const worldCoords = toWorldCoords(x, y, scale);
+        onTouchMove(worldCoords.x, worldCoords.y)
     }
     const handleTouchEnd=(e)=>{
         const clientX=e.changedTouches[0].clientX
         const clientY=e.changedTouches[0].clientY
         const {x,y}=getCanvasPoint(clientX,clientY)
-        onTouchEnd(x,y)
+        const worldCoords = toWorldCoords(x, y, scale);
+        onTouchEnd(worldCoords.x, worldCoords.y)
     }
     const handleClick=(e)=>{
    
