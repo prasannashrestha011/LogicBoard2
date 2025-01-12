@@ -13,26 +13,70 @@ function isPointedOnGate(gate,point){
         point.y <= bottom
     );
 }
-const isPointInPortNode=(point,port)=>{
+const isPointInPortNode = (point, port) => {
+    const { position, width, height } = port;
+    if (!width || !height) return false;
 
-    const {position,width,height}=port
-    if(!width || !height) return false
-    const left = (position.x - width/2-24);
-    const right = position.x + width/2;
-    const top = position.y - height/2;
-    const bottom = position.y + height/2;
+    // Main rectangle boundaries
+    const left = position.x - width / 2 - 42;
+    const right = position.x + width / 2;
+    const top = position.y - height / 2;
+    const bottom = position.y + height / 2;
 
-    const isInsideTheRectangle=point.x >= left &&
-    point.x <= right &&
-    point.y >= top &&
-    point.y <= bottom;
+    // Check if the point is inside the main rectangle
+    const isInsideTheRectangle = 
+        point.x >= left &&
+        point.x <= right &&
+        point.y >= top &&
+        point.y <= bottom;
 
-    const portDistance=calDistance(port,point)
-    const isInPortDistance=portDistance<=port.radius;
+    // Sub-rectangle boundaries (centered within the main rectangle)
+    const subRectWidth = width / 2;
+    const subRectHeight = height / 2;
+    const subLeft = left + (width - subRectWidth) / 2;
+    const subRight = subLeft + subRectWidth;
+    const subTop = top + (height - subRectHeight) / 2;
+    const subBottom = subTop + subRectHeight;
 
-    return isInsideTheRectangle && !isInPortDistance
+    // Check if the point is inside the sub-rectangle
+    const isInsideSubRectangle = 
+        point.x >= subLeft &&
+        point.x <= subRight &&
+        point.y >= subTop &&
+        point.y <= subBottom;
 
- }
+    // Calculate the port distance
+    const portDistance = calDistance(port, point);
+    const isInPortDistance = portDistance <= port.radius;
+
+    
+    return isInsideTheRectangle && !isInsideSubRectangle && !isInPortDistance;
+};
+function isPointInsideSubRectangle(point,port){
+    const { position, width, height } = port;
+    if (!width || !height) return false;
+
+    const XOFFSET=42
+    const left = position.x - width / 2 - XOFFSET;
+ 
+    const top = position.y - height / 2;
+
+
+    const subRectWidth = width / 2;
+    const subRectHeight = height / 2;
+    const subLeft = left + (width - subRectWidth) / 2;
+    const subRight = subLeft + subRectWidth;
+    const subTop = top + (height - subRectHeight) / 2;
+    const subBottom = subTop + subRectHeight;
+
+    // Check if the point is inside the sub-rectangle
+    const isInsideSubRectangle = 
+        point.x >= subLeft &&
+        point.x <= subRight &&
+        point.y >= subTop &&
+        point.y <= subBottom;
+    return isInsideSubRectangle
+}
  //for context menu
  function findConnection(x,y){
     let targetedConnection=null

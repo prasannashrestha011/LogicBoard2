@@ -51,16 +51,35 @@ function DrawGatesAndPort(){
        
     })
     ports.map(port=>{
-        const rectX=(port.position.x-port.width/2-24)
+
+        //this x offset is used to for rectangle positioning where 
+        //using port position
+        const XOFFSET=42
+        const rectX=(port.position.x-port.width/2-XOFFSET)
         const rectY=port.position.y-port.height/2
-        
+        ctx.lineWidth=2
         ctx.beginPath();
         ctx.strokeStyle = "black";
         ctx.rect(rectX, rectY, port.width, port.height);
         ctx.stroke();
 
+        const subRectWidth = port.width / 2;
+        const subRectHeight = port.height / 2;
+        const subRectX = rectX + (port.width - subRectWidth) / 2;
+        const subRectY = rectY + (port.height - subRectHeight) / 2;
+    
+        ctx.beginPath();
+        ctx.strokeStyle = "blue";
+        ctx.rect(subRectX, subRectY, subRectWidth, subRectHeight);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.fillStyle="red"
+        ctx.arc(port.value?subRectX+subRectWidth*0.8:subRectX+subRectWidth*0.24,subRectY+subRectHeight/2,8,0,Math.PI*2)
+        ctx.fill()
+        
         ctx.beginPath()
-         ctx.fillStyle=port.value?"#80461B":"#28282B"
+         ctx.fillStyle=port.value?"red":"black"
         ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
         ctx.fill()
     })

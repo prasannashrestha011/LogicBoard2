@@ -273,8 +273,8 @@ let scale=1
     const togglePortValue=(point)=>{
         if(isDraggingPortNode || isDragging ) return
       
-
-         const clickedPort=findPort(point.x,point.y)
+        const {x,y}=point
+         const clickedPort=ports.find(port=>isPointInsideSubRectangle({x,y},port))
        
         
          if(!clickedPort) return 

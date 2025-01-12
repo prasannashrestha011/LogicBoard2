@@ -14,8 +14,8 @@ const portTemplate={
     value:false ,
     radius:8,
     type:"",
-    width:40,
-    height:60
+    width:80,
+    height:50
 }
 const gateTemplate={
     id:"",

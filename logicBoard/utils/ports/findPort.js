@@ -6,6 +6,22 @@ function findPort(x,y){
     })
     return touchedPort
 }
+function findToggledPort(x,y){
+    let touchedPort=null
+  
+     touchedPort=ports.find(port=>{
+        const toggledPort={
+            ...port,
+            position:{
+                ...port.position,
+                x:port.position.x-24
+            }
+        }
+        const distance=calDistance(toggledPort,{x,y})
+        return distance<=port.radius
+    })
+    return touchedPort
+}
 function findPortOfGate(x,y){
     for (const gate of gates) {
         // Check output port
