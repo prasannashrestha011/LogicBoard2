@@ -51,7 +51,7 @@ function DrawGatesAndPort(){
        
     })
     ports.map(port=>{
-        const rectX=port.position.x-port.width/2
+        const rectX=(port.position.x-port.width/2-24)
         const rectY=port.position.y-port.height/2
         
         ctx.beginPath();

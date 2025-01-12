@@ -31,3 +31,28 @@ function getDistanceFromLine(x, y, x1, y1, x2, y2) {
 
     return Math.sqrt(dx * dx + dy * dy);
 }
+function getDistanceToLineSegment(px, py, x1, y1, x2, y2) {
+    // Line segment vector
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    
+    // Vector from point to start of segment
+    const dpx = px - x1;
+    const dpy = py - y1;
+    
+    // Project point onto line (this gives a scalar factor t)
+    const t = ((dpx * dx + dpy * dy) / (dx * dx + dy * dy));
+    
+    // Clamp t to the segment range [0, 1]
+    const tClamped = Math.max(0, Math.min(1, t));
+    
+    // Find the closest point on the segment
+    const closestX = x1 + tClamped * dx;
+    const closestY = y1 + tClamped * dy;
+    
+    // Distance from the point to the closest point on the segment
+    const distX = px - closestX;
+    const distY = py - closestY;
+    
+    return Math.sqrt(distX * distX + distY * distY);
+}

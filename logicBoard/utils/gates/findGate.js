@@ -17,7 +17,7 @@ const isPointInPortNode=(point,port)=>{
 
     const {position,width,height}=port
     if(!width || !height) return false
-    const left = position.x - width/2;
+    const left = (position.x - width/2-24);
     const right = position.x + width/2;
     const top = position.y - height/2;
     const bottom = position.y + height/2;
@@ -36,17 +36,32 @@ const isPointInPortNode=(point,port)=>{
  //for context menu
  function findConnection(x,y){
     let targetedConnection=null
+    console.log("coordinates ",x,y)
     connections.forEach(conn => {
         const { start, end } = conn;
+        
+        // Distance to the line segment
         const distance = getDistanceFromLine(x, y, start.position.x, start.position.y, end.position.x, end.position.y);
-        const threshold = 55;
-        console.log(distance)
-        if (distance < threshold) {
-          
-            targetedConnection = conn; // Update the clickedConnection
-
+    
+        // Define a base threshold
+        const baseThreshold = 45;
+    
+        // Calculate the middle of the line
+        const midX = (start.position.x + end.position.x) / 2;
+        const midY = (start.position.y + end.position.y) / 2;
+    
+        // Calculate distance to the midpoint of the line
+        const distanceToMid = Math.sqrt(Math.pow(x - midX, 2) + Math.pow(y - midY, 2));
+    
+        // Adjust threshold: larger in the middle, smaller near the ends
+        const dynamicThreshold = baseThreshold + (100 - distanceToMid); // Increasing threshold as you move toward the middle
+    
+        if (distance < dynamicThreshold) {
+            targetedConnection = conn; // Select the connection
         }
     });
+    
+    
     return targetedConnection
  }
  function findGateNode(x,y){
@@ -55,3 +70,4 @@ const isPointInPortNode=(point,port)=>{
  function findPortNode(x,y){
     return ports.find(port=>isPointInPortNode({x,y},port))
  }
+ 

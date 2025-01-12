@@ -198,10 +198,6 @@ let scale=1
         if(selectedPort&&targetedPort){
             const hasInputConnections=(   connections.some(conn=>conn.start.id===selectedPort.id || conn.end.id===selectedPort.id) ||
             connections.some(conn=>conn.start.id===targetedPort.id || conn.end.id===targetedPort.id) ) && selectedPort.type=="input"
-         
-
-          
-       
             const isValidConnection=(selectedPort.id!==targetedPort.id) && !hasInputConnections
             
             
@@ -242,6 +238,7 @@ let scale=1
        isDraggingPortNode=false
        selectedGate=null
         selectedPort=null
+      
         DrawGatesAndPort()
     }
    
@@ -308,13 +305,14 @@ let scale=1
     contextCmds.forEach((option)=>{
         option.addEventListener('click',(e)=>{
             type=e.target.id 
-            console.log("cmd type ",type)
+           
             handleContextMenuAction(type.split('-')[1])
         })
     })
     const handleContextMenuAction=(option)=>{
+        console.log("obj",targetedObject)
         if(!targetedObject || !option) return 
-        console.log(targetedObject)
+        console.log("asdfasdf",targetedObject)
         if(gates.includes(targetedObject)){
            const targetedIdx=gates.indexOf(targetedObject)
            if(targetedIdx==-1) return 
@@ -325,6 +323,7 @@ let scale=1
             !targetedObject.inputs.some(port => 
                 conn.start.id === port.id || conn.end.id === port.id
             )
+           
         );
         
     
@@ -338,6 +337,9 @@ let scale=1
             const targetedIdx=ports.indexOf(targetedObject)
             if(targetedIdx==-1) return 
             ports.splice(targetedIdx,1)
+            connections=connections.filter(conn=>(
+                !(conn.start.id==targetedObject.id || conn.end.id==targetedObject.id)
+            ))
         }
         contextMenu.style.display = 'none';
         targetedObject=null
