@@ -390,16 +390,21 @@ let scale=1
    scale = Math.min(Math.max(0.1, scale), 5.5);
    console.log(zoomFactor)
    zoomSlider.value=scale
-
+    updateGridScale(scale)
         DrawGatesAndPort()
     });
     zoomSlider.addEventListener('input', (e) => {
        
     
         scale = zoomSlider.value;  // Directly set the scale to the current zoom level
-    
+        updateGridScale(scale)
+console.log('Current value of --grid-scale:', gridScale.trim()); 
         DrawGatesAndPort();  // Call your drawing function with the updated scale
     });
     
+    function updateGridScale(scale){
+        document.documentElement.style.setProperty('--grid-scale',scale);
+
+    }
 
  })
