@@ -114,7 +114,8 @@ let offsetY = 0;
         const clickedPortNode=findPortNode(x,y)
         if(clickedPortNode){
             isDraggingPortNode=true
-            selectedPort=clickedPortNode
+            selectedPort = clickedPortNode.value == null ? { ...clickedPortNode, value: false } : clickedPortNode;
+
         }
           // Single unified port check
         const clickedPort = findPort(x,y) || findPortOfGate(x,y) 

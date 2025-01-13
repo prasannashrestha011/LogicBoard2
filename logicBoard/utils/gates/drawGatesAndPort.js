@@ -11,13 +11,13 @@ function DrawGatesAndPort(){
     gates.map(gate=>{
         gate.inputs.map(port=>{
             ctx.beginPath()
-            ctx.fillStyle=port.value?"#80461B":"#28282B"
+            ctx.fillStyle="#28282B"
             ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
             ctx.fill()
         })
         //@@ for output port 
         ctx.beginPath()
-        ctx.fillStyle=gate.output.value?"#80461B":"#28282B"
+        ctx.fillStyle=gate.output.value?"#E35335":"#28282B"
         ctx.arc(gate.output.position.x,gate.output.position.y,gate.output.radius,0,Math.PI*2)
         ctx.fill()
         if(gate.type=="and"){
@@ -61,16 +61,21 @@ function DrawGatesAndPort(){
         const rectX=(port.position.x-port.width/2-XOFFSET)
         const rectY=port.position.y-port.height/2
         ctx.lineWidth=2
-      
+        
+        ctx.beginPath()
+        ctx.fillStyle=port.value?"#E35335":"aliceblue"
         roundRect(ctx,rectX,rectY,port.width,port.height,5)
-    
+        ctx.fill()
 
         const subRectWidth = port.width / 2;
         const subRectHeight = port.height / 2;
         const subRectX = rectX + (port.width - subRectWidth) / 2;
         const subRectY = rectY + (port.height - subRectHeight) / 2;
     
+        ctx.beginPath()
+        ctx.fillStyle="aliceblue"
         roundRect(ctx, subRectX, subRectY, subRectWidth, subRectHeight, 12);
+        ctx.fill()
 
         ctx.beginPath();
         ctx.fillStyle="red"
@@ -78,7 +83,7 @@ function DrawGatesAndPort(){
         ctx.fill()
         
         ctx.beginPath()
-         ctx.fillStyle=port.value?"red":"black"
+         ctx.fillStyle="black"
         ctx.arc(port.position.x,port.position.y,port.radius,0,Math.PI*2)
         ctx.fill()
     })

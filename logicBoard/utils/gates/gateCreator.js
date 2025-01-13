@@ -11,8 +11,8 @@ const notXoffset=30
 const portTemplate={
     id:"",
     position:{x:0,y:0},
-    value:false ,
-    radius:8,
+    value:null ,
+    radius:10,
     type:"",
     width:80,
     height:50
