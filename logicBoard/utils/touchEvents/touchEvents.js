@@ -108,7 +108,7 @@ const onTouchEnd=(x,y)=>{
                 targetedPort=tempPort
               
             }
-           
+            console.log(targetedPort)
             connections.push({
                 start:selectedPort,
                 end:targetedPort,
@@ -136,7 +136,7 @@ const onTouchEnd=(x,y)=>{
    isDraggingPortNode=false
    selectedGate=null
     selectedPort=null
-
+ 
 
     DrawGatesAndPort()
 }

@@ -32,6 +32,7 @@ function findPortOfGate(x,y){
         
         // Check input ports
         for (const input of gate.inputs) {
+          
             const inputDistance = calDistance(input, { x, y });
             if (inputDistance <= input.radius) {
                 return input;

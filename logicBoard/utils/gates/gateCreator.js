@@ -36,8 +36,9 @@ function createGate(type,position){
             position,
             inputs:[
                 {
+                    ...portTemplate,
                     id:`gate-input-port-${id}`,
-                   ...portTemplate,
+                  
                    value:null,
                    position:{x:position.x-notXoffset,y:position.y},
                    type:"gate-input",
@@ -52,6 +53,7 @@ function createGate(type,position){
                 position:{x:position.x+notXoffset*2+35,y:position.y},
             }
          }
+         console.log("new gate ",newGate)
          gates.push(newGate)
          return
     }
@@ -140,7 +142,7 @@ function createPort(type,position){
         position,
         type
     }
-   
+
     ports.push(newInputPort)
 }
 function updatePortPosition(port,newPosition){
