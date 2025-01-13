@@ -31,7 +31,7 @@ let offsetY = 0;
       canvas=document.querySelector('canvas')
       ctx=canvas.getContext('2d')
 
-      const contextMenu=document.getElementById('custom-menu')
+       contextMenu=document.getElementById('custom-menu')
       const gateCmd=document.querySelectorAll('.btn')
      contextCmds=document.querySelectorAll(".menu-opt")
     const zoomSlider=document.getElementById('zoom-handler')
