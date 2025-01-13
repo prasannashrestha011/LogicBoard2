@@ -1,18 +1,15 @@
-function toScreenCoords(x, y, scale) {
-    const canvasRect = canvas.getBoundingClientRect();
+function toScreenCoords(x, y) {
     return {
-        x: (x - canvas.width/2) * scale + canvas.width/2,
-        y: (y - canvas.height/2) * scale + canvas.height/2
+        x: (x + offsetX - canvas.width/2) * scale + canvas.width/2,
+        y: (y + offsetY - canvas.height/2) * scale + canvas.height/2
     };
 }
 
 
-
     
-function toWorldCoords(screenX, screenY, scale) {
-  
+function toWorldCoords(x, y) {
     return {
-        x: (screenX - canvas.width/2) / scale + canvas.width/2,
-        y: (screenY - canvas.height/2) / scale + canvas.height/2
+        x: (x - canvas.width/2) / scale + canvas.width/2 - offsetX,
+        y: (y - canvas.height/2) / scale + canvas.height/2 - offsetY
     };
 }

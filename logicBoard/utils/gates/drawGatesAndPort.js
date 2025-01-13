@@ -3,8 +3,11 @@ function DrawGatesAndPort(){
     ctx.save()
     ctx.translate(canvas.width/2, canvas.height/2);
     ctx.scale(scale, scale);
-    ctx.translate(-canvas.width/2, -canvas.height/2);
+    ctx.translate(-canvas.width/2 +offsetX, -canvas.height/2 + offsetY);
+    
   
+  
+    
     gates.map(gate=>{
         gate.inputs.map(port=>{
             ctx.beginPath()

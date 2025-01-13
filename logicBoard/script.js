@@ -1,4 +1,4 @@
-
+let focusPoint={x:0,y:0}
 let scale=1
  let canvas=null
  let ctx=null
@@ -14,7 +14,11 @@ let scale=1
  
  let selectedGate=null
  let selectedPort=null
- 
+ let offsetX = 0;
+let offsetY = 0;
+
+
+
  let isDragging=false
  let isDraggingPortNode=false // @@ for dragging the outer area of node only @@
  let wasDragging=false
@@ -29,42 +33,30 @@ let scale=1
     const zoomSlider=document.getElementById('zoom-handler')
 
      ctx=canvas.getContext('2d')
-     DrawGatesAndPort()
+     
    
      const handleMouseDown = (e) => {
         wasDragging = false;
-    
-        // Convert screen coordinates to canvas point
         const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
-    
-        // Convert screen point to world coordinates
         const worldCoords = toWorldCoords(screenX, screenY, scale);
-    
-    
-        // Pass the world coordinates to touch start
+       
+       
         onTouchStart(worldCoords.x, worldCoords.y);
+
+        
     };
     
     const handleMouseMove = (e) => {
         wasDragging = true;
    
         const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
-    
-      
         const worldCoords = toWorldCoords(screenX, screenY, scale);
-    
-        
         onTouchMove(worldCoords.x, worldCoords.y);
     };
     
     const handleMouseUp = (e) => {
-        // Convert screen coordinates to canvas point
         const { x: screenX, y: screenY } = getCanvasPoint(e.clientX, e.clientY);
-    
-        // Convert screen point to world coordinates
         const worldCoords = toWorldCoords(screenX, screenY, scale);
-    
-        // Pass the world coordinates to touch end
         onTouchEnd(worldCoords.x, worldCoords.y);
     };
     const handleTouchStart=(e)=>{
@@ -109,15 +101,13 @@ let scale=1
     }
     const onTouchStart=(x,y)=>{
         isDragging=true
-        console.log('\n')
-        console.log("new position ",x,y)
-
+     
         const clickedGate=findGateNode(x,y)
-  
+
         if(clickedGate){
          selectedGate=clickedGate
          targetedObject=clickedGate
-            return 
+ 
         }
       
         //for port dragging event 
@@ -133,12 +123,17 @@ let scale=1
             selectedPort = clickedPort;
             isDrawing = true;
         }
-    targetedObject=selectedPort
+        if(selectedPort){
+            targetedObject=selectedPort
+        }
+       
+     
         
     }
     const onTouchMove = (x, y) => {
 
         if(!isDragging) return
+        
         if(selectedGate){
     
             const updatedGate=updateGatePosition(selectedGate,{x,y})
@@ -166,10 +161,9 @@ let scale=1
             
             ctx.save()
             
-           
-            ctx.translate(canvas.width/2, canvas.height/2)
-            ctx.scale(scale, scale)
-            ctx.translate(-canvas.width/2, -canvas.height/2)
+            ctx.translate(canvas.width/2, canvas.height/2);
+            ctx.scale(scale, scale);
+            ctx.translate(-canvas.width/2 + offsetX, -canvas.height/2 + offsetY);
             
            
             ctx.beginPath()
@@ -187,8 +181,9 @@ let scale=1
             
            
             ctx.restore()
+            return 
         }
-    
+     
        
     };
     const onTouchEnd=(x,y)=>{
@@ -235,14 +230,14 @@ let scale=1
             }
            
         }
-  
-       
+     
         isDrawing=false
        isDragging=false
        isDraggingPortNode=false
        selectedGate=null
         selectedPort=null
-      
+ 
+    
         DrawGatesAndPort()
     }
    
@@ -253,7 +248,7 @@ let scale=1
    
         if(nodeType=="gate"){
             const gateType=type.split('-')[1]
-            console.log(gateType)
+           
             createGate(gateType,position)
            
         }
@@ -264,7 +259,7 @@ let scale=1
         if(nodeType=="zoom"){
             const zoomIntensity = 0.1;
            const zoomType=type.split('-')[1]
-           console.log(zoomType)
+         
             const zoomFactor=zoomType=="in"?(1+zoomIntensity):(1-zoomIntensity)
             scale *=zoomFactor
             scale = Math.min(Math.max(0.1, scale), 5.0);
@@ -314,9 +309,9 @@ let scale=1
         })
     })
     const handleContextMenuAction=(option)=>{
-        console.log("obj",targetedObject)
+  
         if(!targetedObject || !option) return 
-        console.log("asdfasdf",targetedObject)
+      
         if(gates.includes(targetedObject)){
            const targetedIdx=gates.indexOf(targetedObject)
            if(targetedIdx==-1) return 
@@ -352,13 +347,13 @@ let scale=1
     const handleContextMenu = (e) => {
         const {x, y} = getCanvasPoint(e.clientX, e.clientY);
        
-        
+        console.log("context menu running")
          targetedObject = findConnection(x, y) || findGateNode(x, y) || findPortNode(x, y);
 
-        console.log("your targeted object ",targetedObject)
     };
     
-   
+  
+  
     canvas.addEventListener('mousedown',handleMouseDown)
     canvas.addEventListener('mousemove',handleMouseMove)
     canvas.addEventListener('mouseup',handleMouseUp)
@@ -377,28 +372,55 @@ let scale=1
         contextMenu.style.display = 'block';
         handleContextMenu(e)
     })
+
+
+
+
     canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
-   // Use multiplication for smoother zooming
-   const zoomIntensity = 0.1;
-   const zoomFactor = e.deltaY < 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
-   
-
-   scale *= zoomFactor;
- 
-   // Add limits to prevent extreme scaling
-   scale = Math.min(Math.max(0.1, scale), 5.5);
-   console.log(zoomFactor)
-   zoomSlider.value=scale
-    updateGridScale(scale)
-        DrawGatesAndPort()
+        
+        // Get mouse position before zoom
+        const point = getCanvasPoint(e.clientX, e.clientY);
+        const worldPos = toWorldCoords(point.x, point.y);
+        
+        // Calculate zoom
+        const zoomIntensity = 0.1;
+        const zoomFactor = e.deltaY < 0 ? (1 + zoomIntensity) : (1 - zoomIntensity);
+        scale *= zoomFactor;
+        scale = Math.min(Math.max(0.1, scale), 5.5);
+        
+        // Update zoom slider if it exists
+        if (zoomSlider) {
+            zoomSlider.value = scale;
+        }
+        
+        // Calculate offset to keep the worldPos at the same screen position
+        const newScreenPos = toScreenCoords(worldPos.x, worldPos.y);
+        offsetX -= (newScreenPos.x - point.x) / scale;
+        offsetY -= (newScreenPos.y - point.y) / scale;
+        
+        // Update grid if needed
+        if (typeof updateGridScale === 'function') {
+            updateGridScale(scale);
+        }
+        
+        // Redraw
+        DrawGatesAndPort();
     });
+    
+
+
+
+
+
+
+
     zoomSlider.addEventListener('input', (e) => {
        
     
         scale = zoomSlider.value;  // Directly set the scale to the current zoom level
         updateGridScale(scale)
-console.log('Current value of --grid-scale:', gridScale.trim()); 
+
         DrawGatesAndPort();  // Call your drawing function with the updated scale
     });
     
